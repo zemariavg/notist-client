@@ -4,10 +4,10 @@ Instituto Superior Técnico, Universidade de Lisboa
 
 # Preamble
 
-This document explains the project scenarios.  
+This document explains the project scenario.  
 Please read the project overview first.
 
-The scenarios describe a richer application context than the one that will be actually needed to be implemented.  
+The scenario describe a richer application context than the one that will be actually needed to be implemented.  
 The security aspects should be the focus of your work.
 User interface design, although critical in a real application, is secondary in this project.
 
@@ -19,15 +19,6 @@ _Congratulations! You have been hired by one of the following companies._
 
 Each company has its business context and, more importantly, a document format that is pivotal for their business.  
 Later in the project, a security challenge will be revealed and your team will have to respond to it with a suitable solution.
-
-----
-
-# Scenarios
-
-- [NotIST](#NotIST)
-- [TicketIST](#TicketIST)
-- [MotorIST](#MotorIST)
-- [MessagIST](#MessagIST)
 
 ----
 
