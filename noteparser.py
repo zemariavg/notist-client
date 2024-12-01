@@ -5,8 +5,9 @@ def error(message: str) -> None:
     raise ValueError(f"parser.py error: {message}")
     
 """ JSON note file handling functions """
-""" These functions check if the JSON note has all the required fields and valid types """
-""" They allow to validate if a plain note is valid or if a ciphered note is valid """
+""" These functions check if the JSON note has all the required fields and valid types. """
+""" They allow to validate if a plain note is valid or if a ciphered note is valid. """
+""" Check example_notes/ for examples of valid notes. """
 
 # mode is either 'CIPHERED' or 'PLAIN'
 def read_json(file_path: str, mode: str) -> dict: 
