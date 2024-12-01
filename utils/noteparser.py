@@ -47,7 +47,7 @@ def write_json(file_path: str, json_content: dict, mode: str) -> None:
 
 def is_valid_ciphered_json_note(json_content: dict) -> bool:
     """ checks if a ciphered note has all the required fields and valid types"""
-    allowed_fields = {'note', 'metadata'}
+    allowed_fields = {'note', 'metadata', 'iv', 'key'}
     extra_fields = set(json_content.keys()) - allowed_fields
     
     if extra_fields:
@@ -58,14 +58,9 @@ def is_valid_ciphered_json_note(json_content: dict) -> bool:
         if field not in json_content:
             error(f"Missing field in JSON: {field}")
             return False
-    
-    if not isinstance(json_content["note"], str):
-        error("Note is not a string")
-        return False
-        
-    if not isinstance(json_content["metadata"], str):
-        error("Metadata is not a string")
-        return False
+        if not isinstance(json_content[field], str):
+            error(f"Field {field} is not a string")
+            return False
     return True
 
 def is_valid_json_note(json_content: dict) -> bool:

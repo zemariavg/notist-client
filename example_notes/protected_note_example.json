@@ -1,0 +1,6 @@
+{
+    "note": "base64 encoded encrypted note", 
+    "metadata" : "base64 encoded encrypted metadata",
+    "iv": "random initialization vector",
+    "key": "aes key ciphered with pub key of receiver"
+}
