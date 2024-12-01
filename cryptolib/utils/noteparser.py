@@ -1,4 +1,5 @@
-import utils
+from utils import file
+from utils import cryptoutils as crypto
 import json
 
 def error(message: str) -> None:
@@ -12,7 +13,7 @@ def error(message: str) -> None:
 # mode is either 'CIPHERED' or 'PLAIN'
 def read_json(file_path: str, mode: str) -> dict: 
     """ reads json note file and returns content as a dictionary """
-    file_content = utils.read_file_content(file_path)
+    file_content = file.read_file_content(file_path)
     json_content = json.loads(file_content)
     if mode == 'CIPHERED':
         if is_valid_ciphered_json_note(json_content):
@@ -34,20 +35,39 @@ def write_json(file_path: str, json_content: dict, mode: str) -> None:
     """ writes content to a note json file """
     if mode == 'CIPHERED':
         if is_valid_ciphered_json_note(json_content):
-            utils.write_file_content(file_path, json.dumps(json_content))
+            file.write_file_content(file_path, json.dumps(json_content, indent=4))
         else:
             error(f"write_json: Invalid JSON content in file {file_path}")
     elif mode == 'PLAIN':
         if is_valid_json_note(json_content):
-            utils.write_file_content(file_path, json.dumps(json_content))
+            file.write_file_content(file_path, json.dumps(json_content, indent=4))
         else:
             error(f"write_json: Invalid JSON content in file {file_path}")
     else:
         error(f"write_json: Invalid mode {mode}")
 
+def build_ciphred_json_note(note: bytes, note_tag: bytes, metadata: bytes, 
+                        metadata_tag: bytes, iv: bytes, key: bytes) -> dict:
+    """ builds a JSON note dictionary with values encoded in base64 """
+    return {
+        'note': crypto.encode_base64(note),
+        'note_tag': crypto.encode_base64(note_tag),
+        'metadata': crypto.encode_base64(metadata),
+        'metadata_tag': crypto.encode_base64(metadata_tag),
+        'iv': crypto.encode_base64(iv),
+        'key': crypto.encode_base64(key)
+    }
+
+def build_json_note(note: str, metadata: dict) -> dict:
+    """ builds a JSON note dictionary """
+    return {
+        'note': note,
+        'metadata': metadata
+    }
+
 def is_valid_ciphered_json_note(json_content: dict) -> bool:
     """ checks if a ciphered note has all the required fields and valid types"""
-    allowed_fields = {'note', 'metadata', 'iv', 'key'}
+    allowed_fields = {'note', 'note_tag', 'metadata', 'metadata_tag', 'iv', 'key'}
     extra_fields = set(json_content.keys()) - allowed_fields
     
     if extra_fields:
