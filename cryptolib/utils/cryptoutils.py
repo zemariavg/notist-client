@@ -20,9 +20,8 @@ def decode_base64(data: str) -> bytes:
 def generate_random_iv() -> bytes:
     return os.urandom(16)
 
-def generate_secret_key(secret_key_path: str) -> None:
-    key = os.urandom(32)
-    file.write_file_bytes(secret_key_path, key)
+def generate_secret_key() -> bytes:
+    return os.urandom(32)
     
 """ AES Encryption/Decryption Functions """
 def aes_gcm_encrypt(plaintext: bytes, key: bytes, iv: bytes) -> tuple[bytes, bytes]:

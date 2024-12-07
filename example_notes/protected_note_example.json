@@ -1,8 +1,0 @@
-{
-    "note": "base64 encoded encrypted note", 
-    "note_tag": "aes gcm tag of the note",
-    "metadata" : "base64 encoded encrypted metadata",
-    "metadata_tag": "aes gcm tag of the metadata",
-    "iv": "random initialization vector",
-    "key": "aes key ciphered with pub key of receiver"
-}
