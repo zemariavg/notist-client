@@ -10,7 +10,7 @@ Run the tool with
 ```bash
 python3 notist.py
 ```
-#### To protect a note:
+#### To protect a note (output will be in note_path_protected.json):
 ```bash
 python3 notist.py protect <note_path> <aes_key_path> <rsa_pub_key_path>
 ```
