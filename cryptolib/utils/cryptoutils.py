@@ -1,6 +1,6 @@
 import os
 import base64
-from utils import file
+from cryptolib.utils import file
 
 from cryptography.hazmat.backends import default_backend # OpenSSL backend
 from cryptography.hazmat.primitives import serialization

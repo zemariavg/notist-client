@@ -1,6 +1,6 @@
 from ast import Eq
-from utils import file
-from utils import cryptoutils as crypto
+from cryptolib.utils import file
+from cryptolib.utils import cryptoutils as crypto
 import json
 
 """ 

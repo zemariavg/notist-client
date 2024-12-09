@@ -1,6 +1,6 @@
-from check import *
-from protect import *
-from unprotect import *
+from cryptolib.check import *
+from cryptolib.protect import *
+from cryptolib.unprotect import *
 import argparse
 import sys
 

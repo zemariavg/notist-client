@@ -1,6 +1,6 @@
-from utils.file import *
-from utils.cryptoutils import *
-from utils.noteparser import *
+from cryptolib.utils.file import *
+from cryptolib.utils.cryptoutils import *
+from cryptolib.utils.noteparser import *
 import argparse
 import json
 
