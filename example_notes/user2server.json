@@ -4,30 +4,25 @@
     "note_tag": "imtM54c8ZuPIDfyQ7k2mdw==\n",
     "note_key": "Y4l9Rp2XglT42V+YTUsAMbXLYRD4DSEjNi0xs4TV603fO24tqIuPeLMjjGn0pT29q0L+5lCQhPtq\nSTRLf0VIX7A0xy4DKYEFlBK3Us09sC314DSE7/acarZcv6VKKQXOgxFGY2HBGCS4kVH5b18c0Fxy\nLj245JBkWG3sS7POLkeK323NuaBeW3/E7ZD94LtIJ03/tsycGsuHRklTfKVMzsXV3TNyj1TbHydD\nmozp9mqWawNov9chufA9oaeGoeG+3HYOYp9Th1VIGB4tweyBLGKwU5R0UuF/E3hBhxIRQWM9qj9B\nLlBznJGluszhyTQMyd3NpJQNxNzxrkqBm0fIMg==\n",
     "server_metadata": {
-        "id": 123,
+        "id": "john",
         "version": 3,
-        "last_modified_by": 456,
+        "last_modified_by": "john",
         "owner": {
-            "id": 456,
             "username": "john"
         },
         "editors": [
             {
-                "id": 789,
                 "username": "jane"
             },
             {
-                "id": 1011,
                 "username": "bob"
             }
         ],
         "viewers": [
             {
-                "id": 1213,
                 "username": "alice"
             },
             {
-                "id": 1415,
                 "username": "charlie"
             }
         ]

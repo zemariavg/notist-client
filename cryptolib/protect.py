@@ -12,7 +12,8 @@ def protect_note_path(note_path: str, aes_key_path: str, pub_key_path: str) -> N
         aes_key = read_file_bytes(aes_key_path)
         json_content = json.loads(read_file_bytes(note_path))
         protected = protect_note(json_content, aes_key, pub_key_path)
-        write_note(note_path, protected, 'PROTECTED')    
+        protected_path = note_path.replace('.json', '_protected.json')
+        write_note(protected_path, protected, 'PROTECTED')    
     except Exception as e:
         error(f"Error during protect: {e}")
         

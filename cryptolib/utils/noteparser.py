@@ -3,22 +3,22 @@ from cryptolib.utils import file
 from cryptolib.utils import cryptoutils as crypto
 import json
 
-""" 
-JSON note file handling functions 
-    These functions check if the JSON note has all the required fields and valid types. 
+"""
+JSON note file handling functions
+    These functions check if the JSON note has all the required fields and valid types.
     They allow to validate if a note is structured correctly.
-    
+
     Check /example_notes/ for examples of valid notes.
 """
 
 def error(message: str) -> None:
     print(f"note_parser.py error: {message}")
-    
-def read_note(file_path: str, mode: str) -> dict: 
+
+def read_note(file_path: str, mode: str) -> dict:
     """ Reads json note file and returns content as a dictionary """
     file_content = file.read_file_content(file_path)
     json_content = json.loads(file_content)
-   
+
     if mode == 'PROTECTED' and is_valid_protected_note(json_content):
         return json_content
     elif mode == 'UNPROTECTED' and is_valid_unprotected_note(json_content):
@@ -26,20 +26,19 @@ def read_note(file_path: str, mode: str) -> dict:
     else:
         error(f"read_note: Invalid JSON content or mode '{mode}' in file {file_path}")
         return {}
-        
+
 def write_note(file_path: str, json_content: dict, mode: str) -> None:
     """ Writes content to a note json file. if protected, writes to _protected.json """
-        
+
     if mode == 'PROTECTED' and is_valid_protected_note(json_content):
-        file_path = file_path.replace('.json', '_protected.json')
         file.write_file_content(file_path, json.dumps(json_content, indent=4))
     elif mode == 'UNPROTECTED' and is_valid_unprotected_note(json_content):
         file.write_file_content(file_path, json.dumps(json_content, indent=4))
     else:
         error(f"write_note: Invalid JSON content or mode '{mode}' in file {file_path}")
-   
+
 def build_server_metadata(json_content: dict) -> dict:
-    return { 
+    return {
         'id': json_content['id'],
         'version': json_content['version'],
         'last_modified_by': json_content['last_modified_by'],
@@ -57,21 +56,17 @@ def build_user_protected_json(note: bytes, note_tag: bytes, iv: bytes, note_key:
         'note_key': crypto.encode_base64(note_key),
     }
 
-def build_user_unprotected_json(id: int, title: str, note: str, date_created: str, 
-            date_modified: str,last_modified_by: int, version: int, owner_id: int, 
-            owner_username: str, editors: list, viewers: list) -> dict:
+def build_user_unprotected_json(title: str, note: str, date_created: str, date_modified: str,
+        last_modified_by: str, version: int, owner_username: str, editors: list, viewers: list) -> dict:
     """ builds a user JSON note """
     return {
-        'id': id,
+        'title': title,
         'note_content': note,
         'date_created': date_created,
         'date_modified': date_modified,
         'last_modified_by': last_modified_by,
         'version': version,
-        'owner': {
-            'id': owner_id,
-            'username': owner_username
-        },
+        'owner': owner_username,
         'editors': editors,
         'viewers': viewers
     }
@@ -83,29 +78,42 @@ def is_valid_protected_note(json_content: dict) -> bool:
     return is_valid_json(json_content, allowed_fields, allowed_types)
 
 def is_valid_unprotected_note(json_content: dict) -> bool:
-    """ checks if a note has all the required fields and valid types """
-    allowed_fields =  [{'id', 'title', 'note_content', 'date_created', 'date_modified', 
-                        'last_modified_by', 'version', 'owner', 'editors', 'viewers'},
-                        {'id', 'username'}, {'id', 'username'}]
-    allowed_types = [{'id': int, 'title': str, 'note_content': str, 'date_created': str, 
-                    'date_modified': str, 'last_modified_by': int, 'version': int,
-                    'owner': dict, 'editors': list, 'viewers': list},
-                    {'id': int, 'username': str},
-                    {'id': int, 'username': str}] 
+    """ Checks if a note has all the required fields and valid types for the unprotected note format. """
+    # Define allowed fields and their types
+    allowed_fields = [
+        {
+            'title', 'note_content', 'date_created', 'date_modified',
+            'last_modified_by', 'version', 'owner', 'editors', 'viewers'
+        }
+    ]
+    allowed_types = [
+        {
+            'title': str,
+            'note_content': str,
+            'date_created': str, 
+            'date_modified': str,
+            'last_modified_by': str,
+            'version': int,
+            'owner': str,
+            'editors': list,  
+            'viewers': list   
+        },
+    ]
+    
     return is_valid_json(json_content, allowed_fields, allowed_types)
 
-def is_valid_json(json: dict, allowed_fields: list, allowed_types: list, 
+def is_valid_json(json: dict, allowed_fields: list, allowed_types: list,
                                                                 nesting_level: int = 0) -> bool:
     """ Validates JSON data against allowed fields and types at each nesting level. """
-    errors = []  
-    
+    errors = []
+
     if nesting_level >= len(allowed_fields):
         return True
 
     for key, value in json.items():
         if key not in allowed_fields[nesting_level]:
             errors.append(f"Invalid key: {key}")
-        
+
         expected_type = allowed_types[nesting_level].get(key)
         if expected_type:
             if not isinstance(value, expected_type):
@@ -114,12 +122,9 @@ def is_valid_json(json: dict, allowed_fields: list, allowed_types: list,
                 if not is_valid_json(value, allowed_fields, allowed_types, nesting_level + 1):
                     errors.append(f"Invalid nested data for key {key}")
             elif isinstance(value, list):
-                if not all(isinstance(i, dict) for i in value):
-                    errors.append(f"Invalid type for key {key}: expected list of dictionaries")
-                else:
-                    for item in value:
-                        if not is_valid_json(item, allowed_fields, allowed_types, nesting_level + 1):
-                            errors.append(f"Invalid nested data in list for key {key}")
+                for item in value:
+                    if not isinstance(item, str):
+                        errors.append(f"Invalid list item for key {key}")
         else:
             errors.append(f"No type defined for key {key}")
     if errors:
