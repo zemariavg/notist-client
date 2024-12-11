@@ -1,6 +1,7 @@
 from cryptolib.check import *
 from cryptolib.protect import *
 from cryptolib.unprotect import *
+from cryptolib.utils.noteparser import *
 import argparse
 import sys
 
@@ -18,7 +19,7 @@ def display_help() -> None:
 def handle_protect(args) -> None:
     """Handle the protect command."""
     try:
-        protect_note(args.note_file_path, args.aes_key, args.public_key)
+        protect_note_path(args.note_file_path, args.aes_key, args.public_key) 
         print("Note protected successfully.")
     except Exception as e:
         print(f"Error during protect: {e}")
@@ -36,7 +37,7 @@ def handle_check(args) -> None:
 def handle_unprotect(args) -> None:
     """Handle the unprotect command."""
     try:
-        unprotect_note(args.note_file_path, args.private_key_path)
+        unprotect_note_path(args.note_file_path, args.private_key_path)
         print("Note unprotected successfully.")
     except Exception as e:
         print(f"Error during unprotect: {e}")

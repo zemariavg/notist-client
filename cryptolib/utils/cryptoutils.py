@@ -1,6 +1,6 @@
-import os
 import base64
 from cryptolib.utils import file
+from secrets import token_bytes
 
 from cryptography.hazmat.backends import default_backend # OpenSSL backend
 from cryptography.hazmat.primitives import serialization
@@ -18,10 +18,10 @@ def decode_base64(data: str) -> bytes:
 
 """ Random Generation Functions """
 def generate_random_iv() -> bytes:
-    return os.urandom(16)
+    return token_bytes(16)
 
 def generate_secret_key() -> bytes:
-    return os.urandom(32)
+    return token_bytes(32)
     
 """ AES Encryption/Decryption Functions """
 def aes_gcm_encrypt(plaintext: bytes, key: bytes, iv: bytes) -> tuple[bytes, bytes]:
@@ -66,10 +66,26 @@ def read_rsa_public_key(public_key_path: str) -> rsa.RSAPublicKey:
         raise TypeError("The provided key is not an RSA public key.")
     
     return public_key
+
+def read_rsa_public_key_bytes(pub_key_bytes: bytes) -> rsa.RSAPublicKey:
+    public_key = serialization.load_pem_public_key(pub_key_bytes, backend=default_backend())
+    
+    if not isinstance(public_key, rsa.RSAPublicKey):
+        raise TypeError("The provided key is not an RSA public key.")
+    
+    return public_key
     
 def read_rsa_private_key(private_key_path: str) -> rsa.RSAPrivateKey:
     pem = file.read_file_bytes(private_key_path)
     private_key = serialization.load_pem_private_key(pem, password=None, backend=default_backend())
+    
+    if not isinstance(private_key, rsa.RSAPrivateKey):
+        raise TypeError("The provided key is not an RSA private key.")
+    
+    return private_key
+
+def read_rsa_private_key_bytes(priv_key_bytes: bytes) -> rsa.RSAPrivateKey:
+    private_key = serialization.load_pem_private_key(priv_key_bytes, password=None, backend=default_backend())
     
     if not isinstance(private_key, rsa.RSAPrivateKey):
         raise TypeError("The provided key is not an RSA private key.")
