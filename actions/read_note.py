@@ -1,5 +1,5 @@
-from cryptolib import *
-from cryptolib.utils import *
+import os
+from cryptolib.utils import read_note
 from cryptolib.unprotect import unprotect_note
 from datetime import datetime
 from config import NOTES_DIR, PRIV_KEY

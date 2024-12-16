@@ -1,7 +1,7 @@
-from cryptolib import *
-from cryptolib.utils import *
+import os
 from cryptolib.unprotect import unprotect_note
 from cryptolib.protect import protect_note
+from cryptolib.utils import read_note, write_note
 from datetime import datetime
 from config import NOTES_DIR, PRIV_KEY, PUB_KEY 
     
@@ -11,7 +11,7 @@ def edit_note(note_name: str, user: str) -> None:
         
         # unprotect note
         json_content = read_note(note_path, 'PROTECTED')
-        unprotected, note_key = unprotect.unprotect_note(json_content, PRIV_KEY)
+        unprotected, note_key = unprotect_note(json_content, PRIV_KEY)
         
         print(f"Editing note {note_name}...")
         print(f"Current content: {unprotected['note_content']}")

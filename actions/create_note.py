@@ -1,6 +1,6 @@
-from cryptolib import *
-from cryptolib.utils import *
+import os
 from cryptolib.protect import protect_note
+from cryptolib.utils import write_note, build_user_unprotected_json, generate_secret_key
 from datetime import datetime
 from config import NOTES_DIR, PUB_KEY
 
