@@ -1,8 +1,8 @@
-from cryptolib.utils.file import *
-from cryptolib.utils.cryptoutils import *
-from cryptolib.utils.noteparser import *
 import argparse
 import json
+from .utils.file import *
+from .utils.cryptoutils import *
+from .utils.noteparser import *
    
 def unprotect_note_path(note_path: str, priv_key_path: str) -> None:
     try:

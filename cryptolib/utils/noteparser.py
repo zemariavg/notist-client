@@ -1,6 +1,6 @@
 from ast import Eq
-from cryptolib.utils import file
-from cryptolib.utils import cryptoutils as crypto
+from .file import * 
+from .cryptoutils import *
 import json
 
 """
@@ -50,10 +50,10 @@ def build_server_metadata(json_content: dict) -> dict:
 def build_user_protected_json(note: bytes, note_tag: bytes, iv: bytes, note_key: bytes) -> dict:
     """ builds a protected user JSON note with values encoded in base64 """
     return {
-        'iv': crypto.encode_base64(iv),
-        'note': crypto.encode_base64(note),
-        'note_tag': crypto.encode_base64(note_tag),
-        'note_key': crypto.encode_base64(note_key),
+        'iv': encode_base64(iv),
+        'note': encode_base64(note),
+        'note_tag': encode_base64(note_tag),
+        'note_key': encode_base64(note_key),
     }
 
 def build_user_unprotected_json(title: str, note: str, date_created: str, date_modified: str,

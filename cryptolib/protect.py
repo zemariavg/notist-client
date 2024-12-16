@@ -1,10 +1,8 @@
-from ast import NotEq
-from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
-from cryptolib.utils.file import *
-from cryptolib.utils.cryptoutils import *
-from cryptolib.utils.noteparser import *
 import argparse
 import json
+from .utils.file import *
+from .utils.cryptoutils import *
+from .utils.noteparser import *
 
 def protect_note_path(note_path: str, aes_key_path: str, pub_key_path: str) -> None:
     """ Protects a note file with AES GCM and RSA """

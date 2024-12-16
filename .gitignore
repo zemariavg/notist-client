@@ -48,3 +48,4 @@ pylint-report.txt
 *.log
 *.pot
 *.pyc
+*.env

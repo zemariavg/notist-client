@@ -1,8 +1,8 @@
-from cryptolib.utils.file import *
-from cryptolib.utils.cryptoutils import *
-from cryptolib.utils.noteparser import *
 import argparse
 import json
+from .utils.file import *
+from .utils.cryptoutils import *
+from .utils.noteparser import *
 
 def check_note(note_file_path: str, private_key_path: str) -> bool:
     """ Checks integrity of note content """

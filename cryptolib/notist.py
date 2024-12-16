@@ -1,12 +1,10 @@
-from cryptolib.check import *
-from cryptolib.protect import *
-from cryptolib.unprotect import *
-from cryptolib.utils.noteparser import *
 import argparse
 import sys
+from .protect import protect_note_path
+from .unprotect import unprotect_note_path
+from .check import check_note
 
 def display_help() -> None:
-    """Display the help message and exit."""
     print(
         "Usage: \n"
         "\tnotist [-h|help]\n"
@@ -17,7 +15,6 @@ def display_help() -> None:
     sys.exit(0)
 
 def handle_protect(args) -> None:
-    """Handle the protect command."""
     try:
         protect_note_path(args.note_file_path, args.aes_key, args.public_key) 
         print("Note protected successfully.")
@@ -26,7 +23,6 @@ def handle_protect(args) -> None:
         sys.exit(1)
 
 def handle_check(args) -> None:
-    """Handle the check command."""
     try:
         result = check_note(args.note_file_path, args.private_key_path)
         print("Note is valid." if result else "Note has been tampered with.")
@@ -35,7 +31,6 @@ def handle_check(args) -> None:
         sys.exit(1)
 
 def handle_unprotect(args) -> None:
-    """Handle the unprotect command."""
     try:
         unprotect_note_path(args.note_file_path, args.private_key_path)
         print("Note unprotected successfully.")

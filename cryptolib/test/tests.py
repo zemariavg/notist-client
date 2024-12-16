@@ -1,24 +1,24 @@
 import os
 import subprocess
 import json
-
-from cryptography.hazmat.primitives.serialization import PrivateFormat
+import sys
 
 # colors for output
 RESET = "\033[0m"
 GREEN = "\033[32m"
 RED = "\033[31m"
 
-# Run from test directory!
-note = os.path.abspath("test_notes/test1.json")
-note_key = os.path.abspath("test_keys/aes.key")
-protected_note = os.path.abspath("test_notes/test1_protected.json")
-pub_key = os.path.abspath("test_keys/pub.pem")
-priv_key = os.path.abspath("test_keys/priv.pem")
+note = os.path.abspath("cryptolib/test/test_notes/test1.json")
+note_key = os.path.abspath("cryptolib/test/test_keys/aes.key")
+protected_note = os.path.abspath("cryptolib/test/test_notes/test1_protected.json")
+pub_key = os.path.abspath("cryptolib/test/test_keys/pub.pem")
+priv_key = os.path.abspath("cryptolib/test/test_keys/priv.pem")
 
-protect_command = ["python3",  "../notist.py", "protect", note, note_key, pub_key]
-unprotect_command = ["python3",  "../notist.py", "unprotect", protected_note, priv_key] 
-check_command = ["python3",  "../notist.py", "check", protected_note, pub_key]
+notist_module = "cryptolib.notist"
+
+protect_command = ["python3", "-m", notist_module, "protect", note, note_key, pub_key]
+unprotect_command = ["python3", "-m", notist_module, "unprotect", protected_note, priv_key]
+check_command = ["python3", "-m", notist_module, "check", protected_note, pub_key]
 
 def protect_unprotect() -> None:
     print(f"{RESET}Testing protect and unprotect commands...")
