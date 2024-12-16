@@ -13,7 +13,6 @@ def edit_note(note_name: str, user: str) -> None:
         json_content = read_note(note_path, 'PROTECTED')
         unprotected, note_key = unprotect_note(json_content, PRIV_KEY)
         
-        # check if user is the owner/editor
         if unprotected['owner'] != user and user not in unprotected['editors']:
             print("You don't have permission to edit this note.")
             return
