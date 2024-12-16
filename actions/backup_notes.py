@@ -22,7 +22,6 @@ def backup_notes() -> None:
         note_json = read_note(note_path, 'PROTECTED')
         unprotected_note, note_key = unprotect.unprotect_note(note_json, PRIV_KEY)
         
-        # build metadata
         metadata = {
             "version": unprotected_note['version'],
             "last_modified_by": unprotected_note['last_modified_by'],
