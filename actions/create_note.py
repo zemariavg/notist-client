@@ -7,6 +7,11 @@ from config import NOTES_DIR, PUB_KEY
 def create_note(user: str) -> None:
     try:
         title = input("Enter the title: ").strip()
+        note_path = os.path.join(NOTES_DIR, f"{title}.json")
+        if os.path.exists(note_path):
+            print("Note with the same title already exists.")
+            return
+        
         print("Enter the note content (press Enter twice to finish):")
         
         lines = []
@@ -18,7 +23,6 @@ def create_note(user: str) -> None:
             
         content = "\n".join(lines)
         
-        note_path = os.path.join(NOTES_DIR, f"{title}.json")
         # build json
         json_content = build_user_unprotected_json(title=title, note=content, 
             date_created=datetime.now().isoformat(), date_modified=datetime.now().isoformat(),
