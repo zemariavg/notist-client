@@ -11,18 +11,18 @@ This will run the setup.py script and install the cryptolib as well as the requi
 ### **Usage example**
 Run the tool with
 ```bash
-python3 -m cryptnotist.notist
+python3 -m cryptolib.notist
 ```
 #### To protect a note (output will be in note_path_protected.json):
 ```bash
-python3 -m cryptnotist.notist protect <note_path> <aes_key_path> <rsa_pub_key_path>
+python3 -m cryptolib.notist protect <note_path> <aes_key_path> <rsa_pub_key_path>
 ```
 #### To unprotect a note:
 ```bash
-python3 -m cryptnotist.notist unprotect <note_path> <rsa_priv_key_path>
+python3 -m cryptolib.notist unprotect <note_path> <rsa_priv_key_path>
 ```
 
 #### To check note integrity:
 ```bash
-python3 -m cryptnotist.notist check <note_path> <rsa_priv_key_path>
+python3 -m cryptolib.notist check <note_path> <rsa_priv_key_path>
 ```
