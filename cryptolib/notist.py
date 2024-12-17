@@ -8,9 +8,9 @@ def display_help() -> None:
     print(
         "Usage: \n"
         "\tnotist [-h|help]\n"
-        "\tnotist protect (note_file) (aes-key) (public-key)\n"
-        "\tnotist check (note_file) (private-key)\n"
-        "\tnotist unprotect (note_file) (private-key)"
+        "\tnotist protect (plain_note) (aes-key) (public-key)\n"
+        "\tnotist check (protected_note) (private-key)\n"
+        "\tnotist unprotect (protected_note) (private-key)"
     )
     sys.exit(0)
 
