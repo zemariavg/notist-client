@@ -10,7 +10,7 @@ def unprotect_note_path(note_path: str, priv_key_path: str) -> None:
         unprotected = unprotect_note(json_content, priv_key_path)[0] # get only the json
         write_note(note_path, unprotected, 'UNPROTECTED')
     except Exception as e:
-        error(f"Error during unprotect: {e}")
+        raise e
  
 def unprotect_note(note_json: dict, priv_key_path: str) -> tuple[dict, bytes]: # json and aes key
     """ Deciphers note content"""
@@ -29,5 +29,4 @@ def unprotect_note(note_json: dict, priv_key_path: str) -> tuple[dict, bytes]: #
         note = aes_gcm_decrypt(note_content, note_tag, note_key, iv)
         return json.loads(note), note_key
     except Exception as e:
-        error(f"unprotect_user_note: {e}")
-        return {}, b''
+        raise e

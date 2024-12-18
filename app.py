@@ -57,6 +57,8 @@ if __name__ == '__main__':
             
         elif action == "3":
             note_name = input("Note name: ")
+            # list notes
+            # note = input("Note to edit: ")
             edit_note(note_name, user)
         
         elif action == "4":

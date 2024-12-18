@@ -13,8 +13,7 @@ def protect_note_path(note_path: str, aes_key_path: str, pub_key_path: str) -> N
         #protected_path = note_path.replace('.json', '_protected.json')
         write_note(note_path, protected, 'PROTECTED')
     except Exception as e:
-        error(f"Error during protect: {e}")
-        
+        raise e
 
 def protect_note(note_json: dict, note_key: bytes, pub_key_path: str) -> dict:
     """ Ciphers note with AES GCM and AES key with RSA public key """
@@ -30,5 +29,4 @@ def protect_note(note_json: dict, note_key: bytes, pub_key_path: str) -> dict:
         protected_note = build_user_protected_json(ciphered_note, note_tag, iv, ciphered_note_key)
         return protected_note
     except Exception as e:
-        error(f"protect_user_note: {e}") 
-        return {}
+        raise e

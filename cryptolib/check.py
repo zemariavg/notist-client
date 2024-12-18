@@ -19,6 +19,6 @@ def check_note(note_file_path: str, private_key_path: str) -> bool:
         note_tag = decode_base64(jsonDict['note_tag'])
         note_content = aes_gcm_decrypt(note_content, note_tag, noteKey, iv)
     except Exception as e:
-        return False
+        raise e
         
     return True
