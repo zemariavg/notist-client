@@ -72,7 +72,6 @@ if __name__ == '__main__':
             print("Not implemented.")
             
         elif action == "6":
-            print("Sending notes to server...")
             backup_notes()
             
         elif action == "7":
