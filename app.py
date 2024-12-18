@@ -72,7 +72,7 @@ if __name__ == '__main__':
             print("Not implemented.")
             
         elif action == "6":
-            backup_notes()
+            backup_notes(user) # sent by user
             
         elif action == "7":
             # print("Retrieving notes from server...")

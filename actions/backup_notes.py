@@ -8,7 +8,7 @@ import requests
 import os
 import json
 
-def backup_notes() -> None:
+def backup_notes(user: str) -> None:
     try:
         notes = os.listdir(NOTES_DIR)
         headers = { "Content-Type": "application/json" }
@@ -27,6 +27,7 @@ def backup_notes() -> None:
                 unprotected_note, note_key = unprotect.unprotect_note(note_json, PRIV_KEY)
                 
                 note_json['server_metadata'] = {
+                    "req_from": user,
                     "title" : unprotected_note['title'],
                     "version": unprotected_note['version'],
                     "last_modified_by": unprotected_note['last_modified_by'],
