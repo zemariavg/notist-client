@@ -21,7 +21,6 @@ def backup_notes(user: str) -> None:
         for note in notes:
             try: 
                 note_path = os.path.join(NOTES_DIR, note)
-                print(note_path)
                 
                 note_json = read_note(note_path, 'PROTECTED')
                 unprotected_note, note_key = unprotect.unprotect_note(note_json, PRIV_KEY)
@@ -36,12 +35,19 @@ def backup_notes(user: str) -> None:
                     "viewers": unprotected_note['viewers']
                 }
                 
-                print("Sending notes to server...")
+                print(f"Sending note {note} to server")
                 response = requests.post(f"{FRONTEND_URL}/note", json=note_json, headers=headers, timeout=SERVER_TIMEOUT)
+                
+                if response.status_code == 403:
+                    print(f"User not authorized to edit note.")
+                
+                if response.status_code == 400:
+                    print(f"Invalid JSON received/Version is outdated.")
+                    
                 if response.status_code != 201:
-                    print(f"Failed to send note to server. Response: {response.status_code}")
+                    print(f"Failed to send note to server. Response:")
                 else:
-                    print(f"sent note {note} to server. Response: {response.status_code}")
+                    print(f"sent note {note} to server.")
             except Exception as e:
                 print(f"Error sending note to server: {e}")
                 continue
