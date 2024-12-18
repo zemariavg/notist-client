@@ -8,7 +8,7 @@ def create_note(user: str) -> None:
     try:
         title = input("Enter the title: ").strip()
         note_path = os.path.join(NOTES_DIR, f"{title}.json")
-        if os.path.exists(note_path):
+        if os.path.exists(note_path) or os.path.exists(note_path.replace('.json', '_protected.json')):
             print("Note with the same title already exists.")
             return
         
