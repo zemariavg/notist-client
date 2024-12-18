@@ -17,8 +17,8 @@ def print_actions() -> None:
     print("\t3 - edit note")
     print("\t4 - add editor/viewer")
     print("\t5 - remove editor/viewer")
-    print("\t6 - send notes to server")
-    print("\t7 - retrieve notes from server")
+    print("\t6 - backup notes")
+    print("\t7 - get notes")
     print("\t8 - check integrity")
     print("\t9 - exit")
     
@@ -76,8 +76,7 @@ if __name__ == '__main__':
             
         elif action == "7":
             # print("Retrieving notes from server...")
-            # restore_notes()
-            print("Not implemented.")
+
         
         elif action == "8":
             # note = input("Note to check integrity: ")
