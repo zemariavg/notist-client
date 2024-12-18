@@ -31,7 +31,7 @@ def create_note(user: str) -> None:
         # protect note
         aes_key = generate_secret_key()
         protected = protect_note(json_content, aes_key, PUB_KEY)
-        protected_path = note_path.replace('.json', '_protected.json')
+        protected_path = note_path.replace('.json', f'_{user}_protected.json')
         write_note(protected_path, protected, 'PROTECTED')
         print(f"Note {title} created successfully.")
     except Exception as e:

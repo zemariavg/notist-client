@@ -26,23 +26,21 @@ def backup_notes() -> None:
                 note_json = read_note(note_path, 'PROTECTED')
                 unprotected_note, note_key = unprotect.unprotect_note(note_json, PRIV_KEY)
                 
-                metadata = {
+                note_json['server_metadata'] = {
+                    "title" : unprotected_note['title'],
                     "version": unprotected_note['version'],
                     "last_modified_by": unprotected_note['last_modified_by'],
                     "owner": unprotected_note['owner'],
                     "editors": unprotected_note['editors'],
                     "viewers": unprotected_note['viewers']
                 }
-            
-                note_json['server_metadata'] = metadata
                 
                 print("Sending notes to server...")
                 response = requests.post(f"{FRONTEND_URL}/note", json=note_json, headers=headers, timeout=SERVER_TIMEOUT)
-                if response.status_code != 200:
+                if response.status_code != 201:
                     print(f"Failed to send note to server. Response: {response.status_code}")
                 else:
                     print(f"sent note {note} to server. Response: {response.status_code}")
-                    print(f"note content: {note_json}")
             except Exception as e:
                 print(f"Error sending note to server: {e}")
                 continue
