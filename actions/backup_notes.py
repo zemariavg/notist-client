@@ -1,4 +1,3 @@
-from cryptolib import *
 from cryptolib.utils import read_note
 from cryptolib.unprotect import unprotect_note
 from cryptolib.protect import protect_note
@@ -23,7 +22,7 @@ def backup_notes(user: str) -> None:
                 note_path = os.path.join(NOTES_DIR, note)
                 
                 note_json = read_note(note_path, 'PROTECTED')
-                unprotected_note, note_key = unprotect.unprotect_note(note_json, PRIV_KEY)
+                unprotected_note, note_key = unprotect_note(note_json, PRIV_KEY)
                 
                 note_json['server_metadata'] = {
                     "req_from": user,
