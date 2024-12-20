@@ -6,6 +6,7 @@ from config import NOTES_DIR, PRIV_KEY
 
 def read_user_note(note_name: str) -> None:
     try:
+        #TODO: Fix read/edit note. Needs to read/edit from the correct directory if has read/edit access
         note_path = os.path.join(NOTES_DIR, f"{note_name}.json").replace('.json', '_protected.json')
         print(f"Reading note {note_name}...")
         

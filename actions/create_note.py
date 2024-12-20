@@ -6,12 +6,14 @@ from config import NOTES_DIR, PUB_KEY
 
 def create_note(user: str) -> None:
     try:
+        owner_dir = os.path.join(NOTES_DIR, "owner")
+
         title = input("Enter the title: ").strip()
         if title == "":
             print("Title cannot be empty.")
             return
          
-        note_path = os.path.join(NOTES_DIR, f"{title}.json")
+        note_path = os.path.join(owner_dir, f"{title}.json")
         if os.path.exists(note_path) or os.path.exists(note_path.replace('.json', '_protected.json')):
             print("Note with the same title already exists.")
             return
