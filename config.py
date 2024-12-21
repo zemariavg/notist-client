@@ -5,7 +5,6 @@ import os
 load_dotenv()
 
 NOTES_DIR = os.path.join(os.path.expanduser("~"), "notist", "notes")
-SUBDIRECTORIES = ["owner", "editor", "viewer"]
 KEYS_DIR = os.path.join(os.path.expanduser("~"), "notist", "keys")
 PRIV_KEY = os.path.join(KEYS_DIR, "priv.pem")
 PUB_KEY = os.path.join(KEYS_DIR, "pub.pem")

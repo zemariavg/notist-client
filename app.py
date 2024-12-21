@@ -1,7 +1,7 @@
 import argparse
 import requests
 import os
-from config import NOTES_DIR, KEYS_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL, SUBDIRECTORIES
+from config import NOTES_DIR, KEYS_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL
 from actions.create_note import create_note
 from actions.read_note import read_user_note
 from actions.edit_note import edit_note
@@ -22,12 +22,17 @@ def print_actions() -> None:
 
 def clear_screen() -> None:
     print("\033[H\033[J")
+def mount_folders():
+    if not os.path.exists(NOTES_DIR):
+        os.makedirs(NOTES_DIR)
 
 def login() -> str:
     user = input("Login as: ")
     #password = input("Password: ")
     #response = requests.post(f"{FRONTEND_URL}/login", json={"username": user, "password": password})
 
+    mount_folders()
+    retrieve_notes(user) # retrieve_notes on login
     return user
 
     if response.status_code == 200:
@@ -36,18 +41,9 @@ def login() -> str:
         print("Login failed.")
         exit(1)
 
-def mount_folders():
-    if not os.path.exists(NOTES_DIR):
-        os.makedirs(NOTES_DIR)
-    for subdir in SUBDIRECTORIES:
-        subdir_path = os.path.join(NOTES_DIR, subdir)
-        if not os.path.exists(subdir_path):
-            os.makedirs(subdir_path)
 
 if __name__ == '__main__':
     user = login()
-
-    mount_folders()
 
     # main loop
     while True:
