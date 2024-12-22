@@ -54,8 +54,8 @@ if __name__ == '__main__':
             create_note(user)
 
         elif action == "2":
-            note_name = input("Note name: ")
-            read_user_note(note_name)
+            note_title = input("Note Title: ")
+            read_user_note(user, note_title)
 
         elif action == "3":
             note_name = input("Note name: ")
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         elif action == "7":
             # print("Retrieving notes from server...")
             retrieve_notes(user)
-
+            print(f"Notes for user '{user}' successfully retrieved and stored.")
         elif action == "8":
             # note = input("Note to check integrity: ")
             # version = input("Version to check: ")

@@ -7,6 +7,7 @@ from config import NOTES_DIR, PRIV_KEY, PUB_KEY
     
 def edit_note(note_name: str, user: str) -> None:
     try:
+        # TODO: Fix edit note. Needs to edit from the correct directory if has read/edit access
         note_path = os.path.join(NOTES_DIR, f"{note_name}.json").replace('.json', '_protected.json')
         
         # unprotect note

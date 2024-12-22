@@ -1,0 +1,1 @@
+# TODO: When adding a editor/viewer to a note add note key to collaborators table

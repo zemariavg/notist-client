@@ -67,8 +67,10 @@ def create_note(user: str) -> None:
         """
 
         print(f"Note '{title}' created, stored and protected successfully.")
-        #TODO: Note titles - <owner username>_A. Ex: alice_A, alice_B
-        #TODO: backup on create
+        # TODO: Note titles - <owner username>_A. Ex: alice_A, alice_B
+        # TODO: backup on create note
+        # TODO: Create/Backup needs to check if there is already a note with the same title in DB
+        # TODO: On Create/Backup add note key to collaborator table
     except Exception as e:
         print(f"Error creating note: {e}")
         return

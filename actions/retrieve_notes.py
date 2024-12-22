@@ -12,8 +12,7 @@ def retrieve_notes(user: str):
         with open(note_path, "w") as note_file:
             json.dump(notes, note_file, indent=4)
 
-        print(f"Notes for user '{user}' successfully retrieved and stored.")
-
+        #TODO: On Retrieve, get note_key from collaborator table for a note
     except Exception as e:
         #TODO: User Not Found Exception - abort in the server
         print(f"An error occurred: {e}")
