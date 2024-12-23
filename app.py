@@ -58,10 +58,10 @@ if __name__ == '__main__':
             read_user_note(user, note_title)
 
         elif action == "3":
-            note_name = input("Note name: ")
+            note_title = input("Note Title: ")
             # list notes
             # note = input("Note to edit: ")
-            edit_note(note_name, user)
+            edit_note(note_title, user)
 
         elif action == "4":
             # note = input("Note to add editor/viewer: ")

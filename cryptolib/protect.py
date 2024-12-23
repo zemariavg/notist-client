@@ -20,14 +20,13 @@ def protect_note(note_json: dict, note_key: bytes, pub_key_path: str) -> dict:
     try:
         iv = generate_random_iv()
         note = json.dumps(note_json).encode()
-        ciphered_note, note_tag = aes_gcm_encrypt(note, note_key, iv)
+        encrypted_note, note_tag = aes_gcm_encrypt(note, note_key, iv)
         
         # cipher AES key w/ RSA public key
         pub_key = read_rsa_public_key(pub_key_path)
         ciphered_note_key = rsa_encrypt(note_key, pub_key)
         
-        protected_note = build_user_protected_json(note_json['title'], note_json['version'], note_json['last_modified_by'],
-                                                   ciphered_note, note_tag, iv, ciphered_note_key)
+        protected_note = build_user_protected_json(note_json['title'], encrypted_note, note_tag, iv, ciphered_note_key)
         return protected_note
     except Exception as e:
         raise e
