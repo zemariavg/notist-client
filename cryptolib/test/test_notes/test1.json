@@ -1,17 +1,7 @@
 {
     "title": "Example Document",
-    "note_content": "This is an example document.",
-    "date_created": "2022-01-01T12:00:00Z",
-    "date_modified": "2022-01-02T12:00:00Z",
-    "last_modified_by": "john",
-    "version": 3,
-    "owner": "john",
-    "editors": [
-        "jane",
-        "bob"
-    ],
-    "viewers": [
-        "alice",
-        "charlie"
-    ]
+    "encrypted_note": "eBaEh0ISmwQQzVh4zpBIsDdNPskJglXsEJE8PDoOnbL3nlbqVuJ8NJLRATPQ7gt/dSh8bGICVpxY\nHnicZIgudhKyD4E6Tnip+5DpN75tvL/QyVb/u/3h/HWI7qIcaBOWRo/tBfOcreAN8hvRhGqGA3LS\n5oucZukp0R/2YQP3XH2SDiUvF9nFBXJOwbxIVRA7fssnhF8daa3WsugAcD7LUKFKkSWYtNrMyhYz\n6z3Jp7eDV7JKyXu5WutmxtggEi5JACHcsTRw6d+6BRySpKp0TEcO3zCJmAMAo7CUKnATIxL9UCY0\nKEbXRI8ocfcq/cBYxyGQkbbkAYSfPHB+mZnEGpWjteNAD5ER9oisnxl3OlayeAqZA0DM4W+AtnwB\n1N+4YhZh1gVvOb7q8NvW5NERqQPQ8qbjY/+PuJ3MlfQ7VxNSpc9vlV4tudck6u8BeZOycdCBJn2P\nX7PZ/njUUe2saHPbjE21rO0Jb42s0QC2ZDVpVz+gZwxh1vvsVDOvLQ5EUifciczNvj2p6rkaVmlJ\n4K2qsZHOCWCBma8Ze5jOI3TC0KOWCxbLzLjSsz+yUtHfcwz3iD9baOYhnOKfLxGQKS1GtO/npcRx\ntHwvNBmR5Bf1WjFq2iuN8RMnlfJ1ydKI90LjGitFFQbAWTkREuYctNDNE3UHjwCtA8NVLvWvJXPh\nmqs0CJdFxaHgOmw573/VtkHf/yAVm5JMcxchjfj9+tygkB+dX01HMw/QKbCk7+Byygv/WSmEQJ7h\n4/4uwePVbboMJ76s81KiLy1GNz4rsFfKVEouSVW995DUkmYZ18N5Vyzau1Y21sOaz/D9UzQVW1ud\nGqInk9mKkZgJxq0gp/DSFilRk5nAnvyzfWIwVOeuvgx/8oFuyspulULbrvWGWejnw4auWo0Edikj\nZ+kNTL1a5fwSg0c0WSwmRWZ/IvOKFzzGaQ10Avq3vncOXHWZfMW1DUEzt89dILpgay1mWh6leCod\nxqCP7ATHUZWatu0b28Feh7aGVIq67cHu4Fgc+eSWw7G9DN+buGfbk0Ls/hZtNoMN4b1I9LxIwYJw\nWmyw9/lcfBnKLxS6+lxv+ioH+FA+JWSGBrbiqE9ZPvHOghGA+pM2ToEyl+taNyHbjYBkcCgC9qMK\nNY0WWmOa/I77tiJO0SF2eRbD6r4OpV5Qt+k0IsbnLpVjuS/ep8vjhAaEr4vJesOWO9t7jE0mP5Qm\nJhTen8Rg3A8Fhv0=\n",
+    "note_tag": "SIvNftf8I/rU+89oRLVyBw==\n",
+    "iv": "BJyyVO7PmYq7r6wkoufljQ==\n",
+    "note_key": "EwN2ib8YQIHw78Uc0d9vJXyBYaDdkXd/CzCh5dVcwmZJxqV92T0BXsdFbu1qTHmjZDmTrgor24E3\n0OFDa4Rk2L2JO/+F529uMmMSNbdcO9cIH16uwH0j66kn4Q1/6Mcgo5phowytgAWVjCysAC1npO0s\ndcts027tsVUQKwRbD4HVlpMDOPc+sL6baS4II+uRoY96gh2Xgf7ZJR92ClGK7UXNS7iOPvY/qfdj\nYZPJxZi2bZ1GwwQR1FubaLkQlZ5KUstE465Rqmr8TTzbRWf2Ys5JzAJHXziee/XogwI4rnCJK7ts\nWaodBYCDe/l7Gc/PFF6nipZUq7jMBiEbcVZMiw==\n"
 }

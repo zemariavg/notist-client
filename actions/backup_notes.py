@@ -7,49 +7,74 @@ import requests
 import os
 import json
 
-def backup_notes(user: str) -> None:
+def find_note(json_content: dict, note_title: str) -> dict:
+    for role in ["owner", "editor", "viewer"]:
+        notes = json_content.get(role, [])
+        for note in notes:
+            if note.get("title") == note_title:
+                return note
+    return {} 
+
+def backup_note(user: str, note_title: str) -> None:
+    notes_file_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
+    
     try:
-        notes = os.listdir(NOTES_DIR)
-        headers = { "Content-Type": "application/json" }
+        with open(notes_file_path, 'r', encoding='utf-8') as file:
+            notes_file = json.load(file)
         
-        notes = [note for note in notes if note.endswith('_protected.json')]        
-        if not notes:
-            print("No notes to backup.")
+        note_json = find_note(notes_file, note_title)
+        
+        if not note_json:
+            print(f"Note '{note_title}' not found for user '{user}'.")
+            return
+        else:
+            unprotected_note, note_key = unprotect_note(note_json, PRIV_KEY)
+            
+            note_json.update({
+                "req_from": user,
+                "version": unprotected_note['version'],
+            })
+            
+            print(f"Sending note {note_title} to server")
+            headers={"Content-Type": "application/json"}
+            response = requests.post(f"{FRONTEND_URL}/backup_note", json=note_json, headers=headers, timeout=SERVER_TIMEOUT, verify=False)
+            
+            if response.status_code == 403:
+                print(f"User not authorized to edit note.")
+            
+            elif response.status_code == 400:
+                print(f"Invalid JSON received/Version is outdated.")
+                
+            elif response.status_code != 201:
+                print(f"Failed to send note to server. Response:")
+            else:
+                print(f"sent note {note_title} to server.")
+
+    except Exception as e:
+        print(f"Error sending note to server: {e}")
+        return
+
+def backup_all_notes(user: str) -> None:
+    try:
+        notes_file_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
+        
+        if not os.path.exists(notes_file_path):
+            print(f"No notes found for user '{user}'.")
             return
         
-        for note in notes:
-            try: 
-                note_path = os.path.join(NOTES_DIR, note)
-                
-                note_json = read_note(note_path, 'PROTECTED')
-                unprotected_note, note_key = unprotect_note(note_json, PRIV_KEY)
-                
-                note_json['server_metadata'] = {
-                    "req_from": user,
-                    "title" : unprotected_note['title'],
-                    "version": unprotected_note['version'],
-                    "last_modified_by": unprotected_note['last_modified_by'],
-                    "owner": unprotected_note['owner'],
-                    "editors": unprotected_note['editors'],
-                    "viewers": unprotected_note['viewers']
-                }
-                
-                print(f"Sending note {note} to server")
-                response = requests.post(f"{FRONTEND_URL}/note", json=note_json, headers=headers, timeout=SERVER_TIMEOUT)
-                
-                if response.status_code == 403:
-                    print(f"User not authorized to edit note.")
-                
-                if response.status_code == 400:
-                    print(f"Invalid JSON received/Version is outdated.")
-                    
-                if response.status_code != 201:
-                    print(f"Failed to send note to server. Response:")
-                else:
-                    print(f"sent note {note} to server.")
-            except Exception as e:
-                print(f"Error sending note to server: {e}")
-                continue
+        with open(notes_file_path, 'r', encoding='utf-8') as file:
+            notes_file = json.load(file)
+
+        if not any(notes_file.values()):
+            print(f"No notes found for user '{user}'.")
+            return
+        
+        print(f"Backing up notes for user '{user}'...")
+        for role in ["owner", "editor"]:
+            notes = notes_file.get(role, [])
+            for note in notes:
+                backup_note(user, note['title'])
+
     except Exception as e:
         print(f"Error backing up notes: {e}")
         return

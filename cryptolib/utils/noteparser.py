@@ -55,8 +55,6 @@ def build_user_protected_json(title, version, last_modified_by, note: bytes, not
         'note_tag': encode_base64(note_tag),
         'iv': encode_base64(iv),
         'note_key': encode_base64(note_key),
-        'version': version,
-        'last_modified_by': last_modified_by,
     }
 
 def build_user_unprotected_json(title: str, note: str, date_created: str, date_modified: str,
