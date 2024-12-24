@@ -3,17 +3,10 @@ from cryptolib.unprotect import unprotect_note
 from cryptolib.protect import protect_note
 from datetime import datetime
 from config import NOTES_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL, SERVER_TIMEOUT
+from utils.noteutils import find_note
 import requests
 import os
 import json
-
-def find_note(json_content: dict, note_title: str) -> dict:
-    for role in ["owner", "editor", "viewer"]:
-        notes = json_content.get(role, [])
-        for note in notes:
-            if note.get("title") == note_title:
-                return note
-    return {} 
 
 def backup_note(user: str, note_title: str) -> None:
     notes_file_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
@@ -22,7 +15,7 @@ def backup_note(user: str, note_title: str) -> None:
         with open(notes_file_path, 'r', encoding='utf-8') as file:
             notes_file = json.load(file)
         
-        note_json = find_note(notes_file, note_title)
+        note_json = find_note(notes_file, note_title, "edit")
         
         if not note_json:
             print(f"Note '{note_title}' not found for user '{user}'.")
