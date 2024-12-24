@@ -5,7 +5,7 @@ from config import NOTES_DIR, KEYS_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL
 from actions.create_note import create_note
 from actions.read_note import read_user_note
 from actions.edit_note import edit_note
-from actions.backup_notes import backup_notes
+from actions.backup_notes import backup_all_notes, backup_note
 from actions.retrieve_notes import retrieve_notes
 
 def print_actions() -> None:
@@ -22,6 +22,7 @@ def print_actions() -> None:
 
 def clear_screen() -> None:
     print("\033[H\033[J")
+    
 def mount_folders():
     if not os.path.exists(NOTES_DIR):
         os.makedirs(NOTES_DIR)
@@ -35,11 +36,11 @@ def login() -> str:
     retrieve_notes(user) # retrieve_notes on login
     return user
 
-    if response.status_code == 200:
-        return response.json()["token"]
-    else:
-        print("Login failed.")
-        exit(1)
+    # if response.status_code == 200:
+    #     return response.json()["token"]
+    # else:
+    #     print("Login failed.")
+    #     exit(1)
 
 
 if __name__ == '__main__':
@@ -74,8 +75,8 @@ if __name__ == '__main__':
             print("Not implemented.")
 
         elif action == "6":
-            backup_notes(user)  # sent by user
-
+            backup_all_notes(user)
+            
         elif action == "7":
             # print("Retrieving notes from server...")
             retrieve_notes(user)

@@ -9,4 +9,4 @@ KEYS_DIR = os.path.join(os.path.expanduser("~"), "notist", "keys")
 PRIV_KEY = os.path.join(KEYS_DIR, "priv.pem")
 PUB_KEY = os.path.join(KEYS_DIR, "pub.pem")
 FRONTEND_URL = os.getenv("FRONTEND_URL")
-SERVER_TIMEOUT = 10 # seconds
+SERVER_TIMEOUT = 60 # seconds
