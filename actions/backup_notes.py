@@ -28,7 +28,7 @@ def backup_note(user: str, note_title: str) -> None:
             print(f"Note '{note_title}' not found for user '{user}'.")
             return
         else:
-            unprotected_note, note_key = unprotect_note(note_json, PRIV_KEY)
+            unprotected_note, ciphered_note_key = unprotect_note(note_json, PRIV_KEY)
             
             note_json.update({
                 "req_from": user,
