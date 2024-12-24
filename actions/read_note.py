@@ -3,25 +3,8 @@ from cryptolib.unprotect import unprotect_note
 from cryptolib.utils.noteparser import is_valid_protected_note
 from datetime import datetime
 from config import NOTES_DIR, PRIV_KEY
+from utils.noteutils import read_note, find_note
 import json
-
-def find_note(json_content, note_title, permission):
-    roles = []
-    if permission == "read":
-        roles = ["owner", "editor", "viewer"]
-    elif permission == "edit":
-        roles = ["owner", "editor"]
-
-    for role in roles:
-        notes = json_content.get(role, [])
-        for note in notes:
-            if note.get("title") == note_title:
-                return note
-    return None
-
-def read_note(note_path):
-    with open(note_path, 'r', encoding='utf-8') as file:
-        return json.load(file)
 
 def read_user_note(user, note_title: str) -> None:
     try:
