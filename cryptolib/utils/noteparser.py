@@ -47,14 +47,14 @@ def build_server_metadata(json_content: dict) -> dict:
         'viewers': json_content['viewers']
     }
 
-def build_user_protected_json(title, version, last_modified_by, note: bytes, note_tag: bytes, iv: bytes, note_key: bytes) -> dict:
+def build_user_protected_json(title, encrypted_note: bytes, note_tag: bytes, iv: bytes, ciphered_note_key: bytes) -> dict:
     """ builds a protected user JSON note with values encoded in base64 """
     return {
         'title': title,
-        'encrypted_note': encode_base64(note),
+        'encrypted_note': encode_base64(encrypted_note),
         'note_tag': encode_base64(note_tag),
         'iv': encode_base64(iv),
-        'note_key': encode_base64(note_key),
+        'ciphered_note_key': encode_base64(ciphered_note_key)
     }
 
 def build_user_unprotected_json(title: str, note: str, date_created: str, date_modified: str,
@@ -74,9 +74,8 @@ def build_user_unprotected_json(title: str, note: str, date_created: str, date_m
 
 def is_valid_protected_note(json_content: dict) -> bool:
     """ checks if a protected user note has all the required fields and valid types"""
-    allowed_fields = [{"title", "encrypted_note", "note_tag", "iv", "note_key", "version", "last_modified_by"}]
-    #allowed_types = [{"iv": str, "note": str, "note_tag": str, "note_key": str}]
-    allowed_types = [{"title": str, "encrypted_note": str, "note_tag": str, "iv": str, "note_key": str, "version": int, "last_modified_by": str}]
+    allowed_fields = [{"title", "encrypted_note", "note_tag", "iv", "ciphered_note_key"}]
+    allowed_types = [{"title": str, "encrypted_note": str, "note_tag": str, "iv": str, "ciphered_note_key": str}]
     return is_valid_json(json_content, allowed_fields, allowed_types)
 
 def is_valid_unprotected_note(json_content: dict) -> bool:

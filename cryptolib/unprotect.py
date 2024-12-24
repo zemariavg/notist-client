@@ -21,7 +21,7 @@ def unprotect_note(note_json: dict, priv_key_path: str) -> tuple[dict, bytes]: #
         priv_key = read_rsa_private_key(priv_key_path)
         
         # decipher AES key w/ RSA private key
-        note_key = rsa_decrypt(decode_base64(note_json['note_key']), priv_key)
+        note_key = rsa_decrypt(decode_base64(note_json['ciphered_note_key']), priv_key)
         
         # decipher note content
         note_content = decode_base64(note_json['encrypted_note'])
