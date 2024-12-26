@@ -11,9 +11,8 @@ def edit_note(note_title: str, user: str) -> None:
     try:
         notes_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
 
-        formatted_title = f"{user}_{note_title.replace(' ', '_')}"
         json_content = read_note(notes_path)
-        protected_note = find_note(json_content, formatted_title, "edit")
+        protected_note = find_note(json_content, note_title, "edit")
 
         if not protected_note:
             raise Exception(f"Note '{note_title}' not found for user '{user}' or user has no access.")
