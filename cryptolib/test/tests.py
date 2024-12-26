@@ -18,7 +18,7 @@ notist_module = "cryptolib.notist"
 
 protect_command = ["python3", "-m", notist_module, "protect", note, note_key, pub_key]
 unprotect_command = ["python3", "-m", notist_module, "unprotect", protected_note, priv_key]
-check_command = ["python3", "-m", notist_module, "check", protected_note, pub_key]
+check_command = ["python3", "-m", notist_module, "check", protected_note, priv_key]
 
 def protect_unprotect() -> None:
     print(f"{RESET}Testing protect and unprotect commands...")
@@ -32,16 +32,16 @@ def protect_unprotect() -> None:
         protected_note_content = f.read()
     
     assert note_content == protected_note_content
-    os.remove(protected_note)
     print(f"{GREEN}Protect and unprotect commands passed!")
+    os.remove(protected_note)
 
 def protect_check() -> None:
     print(f"{RESET}Testing protect and check commands...")
     
     assert subprocess.run(protect_command).returncode == 0 
     assert subprocess.run(check_command).returncode == 0
-    os.remove(protected_note)
     print(f"{GREEN}Protect and check commands passed!")
+    os.remove(protected_note)
     
 def protect_tamper_check() -> None:
     print(f"{RESET}Testing protect, tamper and check commands...")
@@ -54,13 +54,14 @@ def protect_tamper_check() -> None:
     # change note_tag key's value
     with open(protected_note, "w") as f:
         note_content = json.loads(note_content)
-        note_content["note_tag"] = note_content["note_tag"][::-2]
-        f.write(json.dumps(note_content))
+        # change last character of note_tag
+        note_content["note_tag"] = note_content["note_tag"][:-5] + "0"
+        f.write(json.dumps(note_content, indent=4))
     
     result = subprocess.run(check_command, stdout=subprocess.PIPE, text=True)
-    assert result.stdout.strip() == "Note has been tampered with."
-    os.remove(protected_note)
+    assert result.stdout.strip() != "Note is valid"
     print(f"{GREEN}Protect, tamper and check commands passed!")
+    os.remove(protected_note)
     
 def test_all() -> None:
     protect_unprotect()

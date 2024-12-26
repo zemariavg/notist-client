@@ -1,8 +1,12 @@
 import argparse
+from posix import write
 import sys
-from .protect import protect_note_path
-from .unprotect import unprotect_note_path
+import json
+from .protect import protect_note
+from .unprotect import unprotect_note
 from .check import check_note
+from .utils.file import read_file_bytes
+from .utils.noteparser import write_note, read_note
 
 def display_help() -> None:
     print(
@@ -16,7 +20,11 @@ def display_help() -> None:
 
 def handle_protect(args) -> None:
     try:
-        protect_note_path(args.note_file_path, args.aes_key, args.public_key) 
+        aes_key = read_file_bytes(args.aes_key)
+        json_content = json.loads(read_file_bytes(args.note_file_path))
+        protected = protect_note(json_content, aes_key, args.public_key)
+        protected_path = args.note_file_path.replace('.json', '_protected.json')
+        write_note(protected_path, protected, 'PROTECTED')
         print("Note protected successfully.")
     except Exception as e:
         print(f"Error during protect: {e}")
@@ -32,7 +40,9 @@ def handle_check(args) -> None:
 
 def handle_unprotect(args) -> None:
     try:
-        unprotect_note_path(args.note_file_path, args.private_key_path)
+        json_content = read_note(args.note_file_path, 'PROTECTED')
+        unprotected = unprotect_note(json_content, args.private_key_path)[0] # get only the json
+        write_note(args.note_file_path, unprotected, 'UNPROTECTED')
         print("Note unprotected successfully.")
     except Exception as e:
         print(f"Error during unprotect: {e}")
