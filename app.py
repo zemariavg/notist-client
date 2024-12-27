@@ -8,6 +8,7 @@ from actions.edit_note import edit_note
 from actions.backup_notes import backup_all_notes, backup_note
 from actions.retrieve_notes import retrieve_notes
 from actions.add_collaborator import add_collaborator, add_collaborator
+from actions.check_integrity import check_integrity
 
 def print_actions() -> None:
     print("Notist. The fully encripted note-taking app.")
@@ -75,10 +76,13 @@ if __name__ == '__main__':
             retrieve_notes(user)
             print(f"Notes for user '{user}' successfully retrieved and stored.")
         elif action == "7":
-            # note = input("Note to check integrity: ")
-            # version = input("Version to check: ")
-            # check_integrity(note)
-            print("Not implemented.")
+            note = input("Note to check integrity: ")
+            version = input("Version to check integrity: ")
+            if not version.isnumeric():
+                print("Version must be an integer.")
+                continue
+
+            check_integrity(user, note, int(version))
 
         elif action == "8":
             print("Exiting...")
