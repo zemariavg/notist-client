@@ -3,10 +3,11 @@ import tempfile
 from datetime import datetime
 from config import FRONTEND_URL, PRIV_KEY, SERVER_TIMEOUT, NOTES_DIR, PUB_KEY
 from utils.noteutils import *
+from requests import Session
 from cryptolib.unprotect import unprotect_note
 from cryptolib.protect import protect_note
 
-def add_collaborator(user: str):
+def add_collaborator(httpsession: Session, user: str):
     try:
         note_title = input("Enter the note title: ")
         notes_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
@@ -20,7 +21,7 @@ def add_collaborator(user: str):
             print("You cannot add yourself as editor/viewer.")
             return
 
-        user_to_add_pub_key = fetch_user_pub_key(user_to_add)
+        user_to_add_pub_key = fetch_user_pub_key(httpsession, user_to_add)
         if not user_to_add_pub_key:
             return
 
@@ -50,8 +51,8 @@ def fetch_note(json_content, note_title, user):
         print(f"Cannot find the note {note_title}. Do you have access to {note_title}?")
     return note
 
-def fetch_user_pub_key(user_to_add):
-    response = requests.get(
+def fetch_user_pub_key(httpsession, user_to_add):
+    response = httpsession.get(
         f"{FRONTEND_URL}/users/{user_to_add}/pub_key",
         timeout=SERVER_TIMEOUT,
         verify=False
@@ -91,8 +92,8 @@ def protect_with_new_key(unprotected_note, note_key, user_to_add_pub_key):
     finally:
         os.unlink(temp_pub_key_path)
 
-def add_collaborator_to_backend(user_to_add, permission, protected_note, note_title):
-    response = requests.post(
+def add_collaborator_to_backend(httpsession, user_to_add, permission, protected_note, note_title):
+    response = httpsession.post(
         f"{FRONTEND_URL}/add_collaborator",
         json={"collaborator": user_to_add, "permission": permission, "note": protected_note},
         timeout=SERVER_TIMEOUT,

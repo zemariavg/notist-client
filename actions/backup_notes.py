@@ -4,11 +4,12 @@ from cryptolib.protect import protect_note
 from datetime import datetime
 from config import NOTES_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL, SERVER_TIMEOUT
 from utils.noteutils import find_note
+from requests import Session
 import requests
 import os
 import json
 
-def backup_note(user: str, note_title: str) -> None:
+def backup_note(httpsession: Session, user: str, note_title: str) -> None:
     notes_file_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
     
     try:
@@ -29,9 +30,9 @@ def backup_note(user: str, note_title: str) -> None:
             })
             
             print(f"Sending note {note_title} to server")
-            headers={"Content-Type": "application/json"}
-            response = requests.post(f"{FRONTEND_URL}/backup_note", json=note_json, headers=headers, timeout=SERVER_TIMEOUT, verify=False)
-            
+
+            response = httpsession.post(f"{FRONTEND_URL}/backup_note", json=note_json, timeout=SERVER_TIMEOUT, verify=False)
+
             if response.status_code == 403:
                 print(f"User not authorized to edit note.")
             
@@ -47,7 +48,8 @@ def backup_note(user: str, note_title: str) -> None:
         print(f"Error sending note to server: {e}")
         return
 
-def backup_all_notes(user: str) -> None:
+def backup_all_notes(httpsession: Session, user: str) -> None:
+    # print session data
     try:
         notes_file_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
         
@@ -66,7 +68,7 @@ def backup_all_notes(user: str) -> None:
         for role in ["owner", "editor"]:
             notes = notes_file.get(role, [])
             for note in notes:
-                backup_note(user, note['title'])
+                backup_note(httpsession, user, note['title'])
 
     except Exception as e:
         print(f"Error backing up notes: {e}")

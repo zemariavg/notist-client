@@ -2,6 +2,7 @@ import argparse
 import requests
 import os
 from config import NOTES_DIR, KEYS_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL
+from requests import Session
 from actions.create_note import create_note
 from actions.read_note import read_user_note
 from actions.edit_note import edit_note
@@ -28,12 +29,12 @@ def mount_folders():
     if not os.path.exists(NOTES_DIR):
         os.makedirs(NOTES_DIR)
 
-def login():
+def login(httpsession: Session):
     print("LOGIN NOTIST")
     username = input("Username: ")
     password = input("Password: ")
     try:
-        response = requests.post(f"{FRONTEND_URL}/login", json={"username": username, "password": password}, verify=False)
+        response = httpsession.post(f"{FRONTEND_URL}/login", json={"username": username, "password": password}, verify=False)
 
         if(response.status_code != 200):
             raise Exception(response)
@@ -43,13 +44,22 @@ def login():
         token = response.json()['token']
         headers = {'Authorization': f'Bearer {token}'}
 
-        retrieve_notes(username, headers)
+        retrieve_notes(httpsession, username, headers)
         return username, headers
     except Exception as e:
-        print(f"Failed login: {e}")
+        raise e
 
 if __name__ == '__main__':
-    username, headers = login()
+    try:
+        session = requests.Session()
+        username, headers = login(session)
+        session.headers.update(headers)
+        print(f"Successfully logged in as '{username}'")
+        print(f"Welcome to Notist!")
+        print(f"Headers: {session.headers}")
+    except Exception as e:
+        print(f"Failed to login")
+        exit(1)
 
     # main loop
     while True:
@@ -57,7 +67,7 @@ if __name__ == '__main__':
         action = input("Action: ")
 
         if action == "1":
-            create_note(username)
+            create_note(session, username)
 
         elif action == "2":
             note_title = input("Note Title: ")
@@ -66,24 +76,20 @@ if __name__ == '__main__':
         elif action == "3":
             note_title = input("Note Title: ")
             # list notes
-            edit_note(note_title, username)
+            edit_note(session, note_title, username)
 
         elif action == "4":
-            add_collaborator(username)
+            add_collaborator(session, username)
 
         elif action == "5":
-            backup_all_notes(username)
+            backup_all_notes(session, username)
 
         elif action == "6":
             print("Retrieving notes from server...")
-            retrieve_notes(username)
-            print(f"Notes for user '{user}' successfully retrieved and stored.")
-
-        elif action == "7":
-            retrieve_notes(username, headers)
+            retrieve_notes(session, username, headers)
             print(f"Notes for user '{username}' successfully retrieved and stored.")
 
-        elif action == "8":
+        elif action == "7":
             note = input("Note to check integrity: ")
             version = input("Version to check integrity: ")
             if not version.isnumeric():
