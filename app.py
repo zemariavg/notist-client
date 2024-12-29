@@ -28,24 +28,28 @@ def mount_folders():
     if not os.path.exists(NOTES_DIR):
         os.makedirs(NOTES_DIR)
 
-def login() -> str:
-    user = input("Login as: ")
-    #password = input("Password: ")
-    #response = requests.post(f"{FRONTEND_URL}/login", json={"username": user, "password": password})
+def login():
+    print("LOGIN NOTIST")
+    username = input("Username: ")
+    password = input("Password: ")
+    try:
+        response = requests.post(f"{FRONTEND_URL}/login", json={"username": username, "password": password}, verify=False)
 
-    mount_folders()
-    retrieve_notes(user) # retrieve_notes on login
-    return user
+        if(response.status_code != 200):
+            raise Exception(response)
 
-    # if response.status_code == 200:
-    #     return response.json()["token"]
-    # else:
-    #     print("Login failed.")
-    #     exit(1)
+        mount_folders()
 
+        token = response.json()['token']
+        headers = {'Authorization': f'Bearer {token}'}
+
+        retrieve_notes(username, headers)
+        return username, headers
+    except Exception as e:
+        print(f"Failed login: {e}")
 
 if __name__ == '__main__':
-    user = login()
+    username, headers = login()
 
     # main loop
     while True:
@@ -53,36 +57,40 @@ if __name__ == '__main__':
         action = input("Action: ")
 
         if action == "1":
-            create_note(user)
+            create_note(username)
 
         elif action == "2":
             note_title = input("Note Title: ")
-            read_user_note(user, note_title)
+            read_user_note(username, note_title)
 
         elif action == "3":
             note_title = input("Note Title: ")
             # list notes
-            # note = input("Note to edit: ")
-            edit_note(note_title, user)
+            edit_note(note_title, username)
 
         elif action == "4":
-            add_collaborator(user)
+            add_collaborator(username)
 
         elif action == "5":
-            backup_all_notes(user)
-            
+            backup_all_notes(username)
+
         elif action == "6":
-            # print("Retrieving notes from server...")
-            retrieve_notes(user)
+            print("Retrieving notes from server...")
+            retrieve_notes(username)
             print(f"Notes for user '{user}' successfully retrieved and stored.")
+
         elif action == "7":
+            retrieve_notes(username, headers)
+            print(f"Notes for user '{username}' successfully retrieved and stored.")
+
+        elif action == "8":
             note = input("Note to check integrity: ")
             version = input("Version to check integrity: ")
             if not version.isnumeric():
                 print("Version must be an integer.")
                 continue
 
-            check_integrity(user, note, int(version))
+            check_integrity(username, note, int(version))
 
         elif action == "8":
             print("Exiting...")
