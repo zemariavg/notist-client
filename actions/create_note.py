@@ -2,15 +2,20 @@ import os
 from cryptolib.protect import protect_note
 from cryptolib.utils.noteparser import build_user_unprotected_json, generate_secret_key
 from datetime import datetime
+
+from sqlalchemy.sql.sqltypes import TIME
 from config import NOTES_DIR, PUB_KEY
 from utils.noteutils import write_title, write_note_content, write_note
+from requests import Session
 import json
 
-def create_note(user: str) -> None:
+def create_note(httpsession: Session, user: str) -> None:
     try:
         notes_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
 
         title = write_title(user)
+        if title == None:
+            return
         content = write_note_content()
 
         # build json
