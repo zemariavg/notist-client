@@ -26,7 +26,7 @@ def check_integrity(user: str, note_title: str, version: int) -> None:
             json.dump(note, temp_note)
             temp_note_path = temp_note.name
             
-        try:  
+        try:
             check_note(temp_note_path, PRIV_KEY)
             print(f"Note {note_title} version {version} is intact.")
         except Exception as e:
