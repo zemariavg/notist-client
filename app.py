@@ -5,7 +5,7 @@ from config import NOTES_DIR, KEYS_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL
 from actions.create_note import create_note
 from actions.read_note import read_user_note
 from actions.edit_note import edit_note
-from actions.backup_notes import backup_all_notes, backup_note
+from actions.backup_notes import backup_all_notes
 from actions.retrieve_notes import retrieve_notes
 
 def print_actions() -> None:

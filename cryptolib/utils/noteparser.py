@@ -51,9 +51,9 @@ def build_user_protected_json(title, encrypted_note: bytes, note_tag: bytes, iv:
     """ builds a protected user JSON note with values encoded in base64 """
     return {
         'title': title,
+        'iv': encode_base64(iv),
         'encrypted_note': encode_base64(encrypted_note),
         'note_tag': encode_base64(note_tag),
-        'iv': encode_base64(iv),
         'ciphered_note_key': encode_base64(ciphered_note_key)
     }
 
