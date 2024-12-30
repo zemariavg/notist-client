@@ -1,8 +1,8 @@
-import os
+import os, requests
 from cryptolib.protect import protect_note
 from cryptolib.utils.noteparser import build_user_unprotected_json, generate_secret_key
 from datetime import datetime
-from config import NOTES_DIR, PUB_KEY
+from config import NOTES_DIR, PUB_KEY, FRONTEND_URL, SERVER_TIMEOUT
 from utils.noteutils import write_title, write_note_content, write_note
 import json
 
@@ -22,10 +22,23 @@ def create_note(user: str) -> None:
         # protect and store note
         aes_key = generate_secret_key()
         protected_note = protect_note(json_content, aes_key, PUB_KEY)
-        write_note(notes_path, protected_note)
 
+        headers = {
+            "Content-Type": "application/json",
+            "req_from": user,
+            "version": str(json_content['version'])  # TODO: Se alguem intersepta esta note e altera a versao tamos fdds
+        }
+        response = requests.post(f"{FRONTEND_URL}/create_note", json=protected_note, headers=headers, timeout=SERVER_TIMEOUT, verify=False)
+
+        if response.status_code == 401:
+            print(f"{response}: Note already exists in the database.")
+            return
+        elif response.status_code != 201:
+            print(f"{response}: Failed to send note to server.")
+            return
+
+        write_note(notes_path, protected_note)
         print(f"Note '{title}' created, stored and protected successfully.")
-        # TODO: backup on create note. Backup to DB before writing locally? (To check duplicate note title)
     except Exception as e:
         print(f"Error creating note: {e}")
         return
