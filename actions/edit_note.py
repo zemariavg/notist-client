@@ -7,10 +7,10 @@ from config import NOTES_DIR, PRIV_KEY, PUB_KEY
 from utils.noteutils import read_note, find_note, overwrite_note, write_note_content
 from actions.backup_notes import backup_on_server
 from actions.retrieve_notes import retrieve_notes
+from requests import Session
 import json
 
-
-def edit_note(note_title: str, user: str) -> None:
+def edit_note(httpsession: Session, note_title: str, user: str) -> None:
     try:
         notes_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
 

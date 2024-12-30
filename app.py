@@ -1,12 +1,16 @@
 import argparse
 import requests
 import os
+import getpass
 from config import NOTES_DIR, KEYS_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL
+from requests import Session
 from actions.create_note import create_note
 from actions.read_note import read_user_note
 from actions.edit_note import edit_note
 from actions.backup_notes import backup_all_notes
 from actions.retrieve_notes import retrieve_notes
+from actions.add_collaborator import add_collaborator, add_collaborator
+from actions.check_integrity import check_integrity
 
 def print_actions() -> None:
     print("Notist. The fully encripted note-taking app.")
@@ -14,11 +18,10 @@ def print_actions() -> None:
     print("\t2 - read note")
     print("\t3 - edit note")
     print("\t4 - add editor/viewer")
-    print("\t5 - remove editor/viewer")
-    print("\t6 - backup notes")
-    print("\t7 - retrieve notes")
-    print("\t8 - check integrity")
-    print("\t9 - exit")
+    print("\t5 - backup notes")
+    print("\t6 - retrieve notes")
+    print("\t7 - check integrity")
+    print("\t8 - exit")
 
 def clear_screen() -> None:
     print("\033[H\033[J")
@@ -30,9 +33,10 @@ def mount_folders():
 def login():
     print("LOGIN NOTIST")
     username = input("Username: ")
-    password = input("Password: ")
+    password = getpass.getpass("Password: ")
     try:
-        response = requests.post(f"{FRONTEND_URL}/login", json={"username": username, "password": password}, verify=False)
+        session = requests.Session()
+        response = session.post(f"{FRONTEND_URL}/login", json={"username": username, "password": password}, verify=False)
 
         if(response.status_code != 200):
             raise Exception(response)
@@ -41,14 +45,21 @@ def login():
 
         token = response.json()['token']
         headers = {'Authorization': f'Bearer {token}'}
+        session.headers.update(headers)
 
-        retrieve_notes(username, headers)
-        return username, headers
+        retrieve_notes(session, username)
+        print(f"Successfully logged in as '{username}'")
+        print(f"Welcome to Notist!")
+        return username, session
     except Exception as e:
-        print(f"Failed login: {e}")
+        raise e
 
 if __name__ == '__main__':
-    username, headers = login()
+    try:
+        username, session = login()
+    except Exception as e:
+        print(f"Failed to login")
+        exit(1)
 
     # main loop
     while True:
@@ -56,7 +67,7 @@ if __name__ == '__main__':
         action = input("Action: ")
 
         if action == "1":
-            create_note(username)
+            create_note(session, username)
 
         elif action == "2":
             note_title = input("Note Title: ")
@@ -65,33 +76,29 @@ if __name__ == '__main__':
         elif action == "3":
             note_title = input("Note Title: ")
             # list notes
-            # note = input("Note to edit: ")
-            edit_note(note_title, username)
+            edit_note(session, note_title, username)
 
         elif action == "4":
-            # note = input("Note to add editor/viewer: ")
-            # add_editor_viewer(note)
-            print("Not implemented.")
+            add_collaborator(session, username)
 
         elif action == "5":
-            # note = input("Note to remove editor/viewer: ")
-            # remove_editor_viewer(note)
-            print("Not implemented.")
+            backup_all_notes(session, username)
 
         elif action == "6":
-            backup_all_notes(username)
-            
-        elif action == "7":
-            # print("Retrieving notes from server...")
-            retrieve_notes(username, headers)
+            print("Retrieving notes from server...")
+            retrieve_notes(session, username)
             print(f"Notes for user '{username}' successfully retrieved and stored.")
-        elif action == "8":
-            # note = input("Note to check integrity: ")
-            # version = input("Version to check: ")
-            # check_integrity(note)
-            print("Not implemented.")
 
-        elif action == "9":
+        elif action == "7":
+            note = input("Note to check integrity: ")
+            version = input("Version to check integrity: ")
+            if not version.isnumeric():
+                print("Version must be an integer.")
+                continue
+
+            check_integrity(username, note, int(version))
+
+        elif action == "8":
             print("Exiting...")
             break
 

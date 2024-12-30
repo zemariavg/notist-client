@@ -4,11 +4,12 @@ from cryptolib.protect import protect_note
 from datetime import datetime
 from config import NOTES_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL, SERVER_TIMEOUT
 from utils.noteutils import find_note
+from requests import Session
 import requests
 import os
 import json
 
-def backup_on_server(user: str, note_json: dict) -> int:
+def backup_on_server(httpsession: Session, user: str, note_json: dict) -> int:
     unprotected_note, ciphered_note_key = unprotect_note(note_json, PRIV_KEY)
 
     # print(f"Sending note {note_title} to server")
@@ -17,7 +18,7 @@ def backup_on_server(user: str, note_json: dict) -> int:
         "req_from": user,
         "version": str(unprotected_note['version'])  # TODO: Se alguem intersepta esta note e altera a versao tamos fdds
     }
-    response = requests.post(f"{FRONTEND_URL}/backup_note", json=note_json, headers=headers,
+    response = httpsession.post(f"{FRONTEND_URL}/backup_note", json=note_json, headers=headers,
                              timeout=SERVER_TIMEOUT, verify=False)
 
     if response.status_code == 403:
@@ -33,7 +34,7 @@ def backup_on_server(user: str, note_json: dict) -> int:
         # print(f"sent note {note_title} to server.")
         return 1
 
-def backup_note_from_file(user: str, note_title: str) -> int:
+def backup_note_from_file(httpsession: Session, user: str, note_title: str) -> int:
     notes_file_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
 
     try:
@@ -46,14 +47,15 @@ def backup_note_from_file(user: str, note_title: str) -> int:
             print(f"Note '{note_title}' not found for user '{user}'.")
             return 0
         else:
-            return backup_on_server(user, note_json)
+            return backup_on_server(httpsession, user, note_json)
 
     except Exception as e:
         print(f"Error sending note to server: {e}")
         return 0
 
 
-def backup_all_notes(user: str) -> None:
+def backup_all_notes(httpsession: Session, user: str) -> None:
+    # print session data
     try:
         notes_file_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
 
@@ -74,7 +76,7 @@ def backup_all_notes(user: str) -> None:
             notes = notes_file.get(role, [])
             for note in notes:
                 total += 1
-                backed += backup_note_from_file(user, note['title'])
+                backed += backup_note_from_file(httpsession, user, note['title'])
         print(f"{backed}/{total} notes successfully backed up")
     except Exception as e:
         print(f"Error backing up notes: {e}")

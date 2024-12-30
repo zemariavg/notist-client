@@ -3,14 +3,19 @@ from cryptolib.protect import protect_note
 from cryptolib.utils.noteparser import build_user_unprotected_json, generate_secret_key
 from datetime import datetime
 from config import NOTES_DIR, PUB_KEY, FRONTEND_URL, SERVER_TIMEOUT
+from sqlalchemy.sql.sqltypes import TIME
+from config import NOTES_DIR, PUB_KEY
 from utils.noteutils import write_title, write_note_content, write_note
+from requests import Session
 import json
 
-def create_note(user: str) -> None:
+def create_note(httpsession: Session, user: str) -> None:
     try:
         notes_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
 
         title = write_title(user)
+        #if title == None:
+        #    return
         content = write_note_content()
 
         # build json
@@ -28,7 +33,7 @@ def create_note(user: str) -> None:
             "req_from": user,
             "version": str(json_content['version'])  # TODO: Se alguem intersepta esta note e altera a versao tamos fdds
         }
-        response = requests.post(f"{FRONTEND_URL}/create_note", json=protected_note, headers=headers, timeout=SERVER_TIMEOUT, verify=False)
+        response = httpsession.post(f"{FRONTEND_URL}/create_note", json=protected_note, headers=headers, timeout=SERVER_TIMEOUT, verify=False)
 
         if response.status_code == 401:
             print(f"{response}: Note already exists in the database.")

@@ -1,3 +1,4 @@
+from requests import Session
 from config import NOTES_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL, SERVER_TIMEOUT
 import requests
 import os
@@ -6,10 +7,10 @@ import urllib3
 # suppress InsecureRequestWarning due to server certificate being self-signed
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-def retrieve_notes(username: str, headers):
+def retrieve_notes(httpsession: Session, username: str):
     print(f"Retrieving notes for user {username}...")
     try:
-        response = requests.get(f"{FRONTEND_URL}/users/{username}/notes", timeout=SERVER_TIMEOUT, headers=headers, verify=False)
+        response = httpsession.get(f"{FRONTEND_URL}/users/{username}/notes", timeout=SERVER_TIMEOUT, verify=False)
         notes = response.json()
         
         if response.status_code == 500:

@@ -11,9 +11,8 @@ def read_user_note(user, note_title: str) -> None:
         note_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
         print(f"Reading note '{note_title}' ...\n")
 
-        formatted_title = f"{user}_{note_title.replace(' ', '_')}"
         json_content = read_note(note_path)
-        protected_note = find_note(json_content, formatted_title, "read")
+        protected_note = find_note(json_content, note_title, "read")
 
         if not protected_note:
             raise Exception(f"Note '{note_title}' not found for user '{user}' or user has no access.")
@@ -22,6 +21,7 @@ def read_user_note(user, note_title: str) -> None:
             unprotected = unprotect_note(protected_note, PRIV_KEY)[0]
             print(f"Title: {unprotected['title']}")
             print(f"Version: {unprotected['version']}, Last modified by: {unprotected['last_modified_by']}")
+            print(f"Date created: {unprotected['date_created']}, Date modified: {unprotected['date_modified']}")
             print(f"Content: {unprotected['note_content']}\n")
         else:
             raise Exception(f"read_note.py: Note '{note_title}': Invalid protected json")
