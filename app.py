@@ -1,6 +1,7 @@
 import argparse
 import requests
 import os
+import getpass
 from config import NOTES_DIR, KEYS_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL
 from requests import Session
 from actions.create_note import create_note
@@ -29,12 +30,13 @@ def mount_folders():
     if not os.path.exists(NOTES_DIR):
         os.makedirs(NOTES_DIR)
 
-def login(httpsession: Session):
+def login():
     print("LOGIN NOTIST")
     username = input("Username: ")
-    password = input("Password: ")
+    password = getpass.getpass("Password: ")
     try:
-        response = httpsession.post(f"{FRONTEND_URL}/login", json={"username": username, "password": password}, verify=False)
+        session = requests.Session()
+        response = session.post(f"{FRONTEND_URL}/login", json={"username": username, "password": password}, verify=False)
 
         if(response.status_code != 200):
             raise Exception(response)
@@ -43,20 +45,18 @@ def login(httpsession: Session):
 
         token = response.json()['token']
         headers = {'Authorization': f'Bearer {token}'}
+        session.headers.update(headers)
 
-        retrieve_notes(httpsession, username, headers)
-        return username, headers
+        retrieve_notes(session, username)
+        print(f"Successfully logged in as '{username}'")
+        print(f"Welcome to Notist!")
+        return username, session
     except Exception as e:
         raise e
 
 if __name__ == '__main__':
     try:
-        session = requests.Session()
-        username, headers = login(session)
-        session.headers.update(headers)
-        print(f"Successfully logged in as '{username}'")
-        print(f"Welcome to Notist!")
-        print(f"Headers: {session.headers}")
+        username, session = login()
     except Exception as e:
         print(f"Failed to login")
         exit(1)
@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
         elif action == "6":
             print("Retrieving notes from server...")
-            retrieve_notes(session, username, headers)
+            retrieve_notes(session, username)
             print(f"Notes for user '{username}' successfully retrieved and stored.")
 
         elif action == "7":

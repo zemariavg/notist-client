@@ -36,7 +36,7 @@ def add_collaborator(httpsession: Session, user: str):
         collaborator_protected_note = protect_with_new_key(unprotected_note, note_key, user_to_add_pub_key)
         collaborator_protected_note['version'] = unprotected_note['version']
 
-        add_collaborator_to_backend(user_to_add, permission, collaborator_protected_note, note_title)
+        add_collaborator_to_backend(httpsession, user_to_add, permission, collaborator_protected_note, note_title)
         
         # protect with this user's public key so he can access it
         edited_note = protect_note(unprotected_note, note_key, PUB_KEY)
