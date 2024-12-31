@@ -14,9 +14,9 @@ def edit_note(httpsession: Session, note_title: str, user: str) -> None:
     try:
         notes_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
 
-        title = f"{user}_{note_title.replace(' ', '_')}"
+        #title = f"{user}_{note_title.replace(' ', '_')}"
         json_content = read_note(notes_path)
-        protected_note = find_note(json_content, title, "edit")
+        protected_note = find_note(json_content, note_title, "edit")
 
         if not protected_note:
             raise Exception(f"Note '{note_title}' not found for user '{user}' or user has no access.")
@@ -35,10 +35,10 @@ def edit_note(httpsession: Session, note_title: str, user: str) -> None:
             # protect note
             protected = protect_note(unprotected, note_key, PUB_KEY)
 
-            if backup_on_server(user, protected) == 0:
+            if backup_on_server(httpsession, user, protected) == 0:
                 return
 
-            retrieve_notes(user) #TODO: is best to do retrieve, because if the user has been added as collaborator, in the mean time, he also gets those updates
+            retrieve_notes(httpsession, user)
             #overwrite_note(notes_path, json_content, protected)
             print(f"Note '{note_title}' edited successfully.")
         else:
