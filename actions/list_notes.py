@@ -7,6 +7,10 @@ def list_notes(username: str):
         notes_path = os.path.join(NOTES_DIR, f"{username}_notes.json")
         json_content = read_note(notes_path)
 
+        has_notes = any(len(notes) > 0 for notes in json_content.values())
+        if not has_notes:
+            print(f"No notes found for user '{username}'.")
+            return
         print(f"Notes for user '{username}':")
         for permission, notes in json_content.items():
             for note in notes:
