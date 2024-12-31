@@ -9,7 +9,7 @@ import json
 def read_user_note(username, note_title: str) -> None:
     try:
         notes_path = os.path.join(NOTES_DIR, f"{username}_notes.json")
-        print(f"Reading note '{note_title}' ...\n")
+        print(f"Reading note '{note_title}'...")
 
         json_content = read_note(notes_path)
         protected_note = find_note(json_content, note_title, "read")
@@ -22,7 +22,7 @@ def read_user_note(username, note_title: str) -> None:
             print(f"Title: {unprotected['title']}")
             print(f"Version: {unprotected['version']}, Last modified by: {unprotected['last_modified_by']}")
             print(f"Date created: {unprotected['date_created']}, Date modified: {unprotected['date_modified']}")
-            print(f"Content: {unprotected['note_content']}\n")
+            print(f"Content: {unprotected['note_content']}")
         else:
             raise Exception(f"read_note.py: Note '{note_title}': Invalid protected json")
     except Exception as e:
