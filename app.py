@@ -11,9 +11,10 @@ from actions.backup_notes import backup_all_notes
 from actions.retrieve_notes import retrieve_notes
 from actions.add_collaborator import add_collaborator, add_collaborator
 from actions.check_integrity import check_integrity
+from actions.list_notes import list_notes
 
 def print_actions() -> None:
-    print("Notist. The fully encripted note-taking app.")
+    print("Notist. The fully encrypted note-taking app.")
     print("\t1 - create note")
     print("\t2 - read note")
     print("\t3 - edit note")
@@ -21,7 +22,8 @@ def print_actions() -> None:
     print("\t5 - backup notes")
     print("\t6 - retrieve notes")
     print("\t7 - check integrity")
-    print("\t8 - exit")
+    print("\t8 - list notes")
+    print("\t9 - exit")
 
 def clear_screen() -> None:
     print("\033[H\033[J")
@@ -97,8 +99,10 @@ if __name__ == '__main__':
                 continue
 
             check_integrity(username, note, int(version))
-
         elif action == "8":
+            list_notes(username)
+
+        elif action == "9":
             print("Exiting...")
             break
 

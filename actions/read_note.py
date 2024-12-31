@@ -6,16 +6,16 @@ from config import NOTES_DIR, PRIV_KEY
 from utils.noteutils import read_note, find_note
 import json
 
-def read_user_note(user, note_title: str) -> None:
+def read_user_note(username, note_title: str) -> None:
     try:
-        note_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
+        notes_path = os.path.join(NOTES_DIR, f"{username}_notes.json")
         print(f"Reading note '{note_title}' ...\n")
 
-        json_content = read_note(note_path)
+        json_content = read_note(notes_path)
         protected_note = find_note(json_content, note_title, "read")
 
         if not protected_note:
-            raise Exception(f"Note '{note_title}' not found for user '{user}' or user has no access.")
+            raise Exception(f"Note '{note_title}' not found for user '{username}' or user has no access.")
         elif is_valid_protected_note(protected_note):
             # unprotect note
             unprotected = unprotect_note(protected_note, PRIV_KEY)[0]
