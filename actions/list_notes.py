@@ -1,46 +1,56 @@
 from config import NOTES_DIR, FRONTEND_URL, SERVER_TIMEOUT
-import json, os
+import os
+import json
 import requests
-from utils.noteutils import read_note, find_note
+from utils.noteutils import read_note
 from requests.sessions import Session
 
-def list_notes(httpsession: Session, username: str):
+
+def list_notes_from_json(json_content: dict, source: str):
+    """Lists notes from the provided JSON content."""
+    if not any(len(notes) > 0 for notes in json_content.values()):
+        print(f"No notes found in {source}.")
+        return
+
+    print(f"Notes from {source}:")
+    for permission, notes in json_content.items():
+        for note in notes:
+            print(f"{note['title']}, {permission}")
+
+
+def fetch_notes_local(notes_path: str, username: str) -> dict:
+    """Fetches notes locally from a JSON file."""
     try:
-        # locally
-        notes_path = os.path.join(NOTES_DIR, f"{username}_notes.json")
-        json_content_local = read_note(notes_path)
-
-        has_notes = any(len(notes) > 0 for notes in json_content_local.values())
-        if not has_notes:
-            print(f"No notes found for user '{username}'.")
-            return
-        print(f"Local notes for user '{username}':")
-        for permission, notes in json_content_local.items():
-            for note in notes:
-                print(f"{note['title']}, {permission}")
-                
-        # on server
-        response = httpsession.get(f"{FRONTEND_URL}/users/{username}/notes", timeout=SERVER_TIMEOUT, verify=False)
-        json_content_server = response.json()
-        
-        if response.status_code == 500:
-            print("Internal server error.")
-            return
-            
-        has_notes = any(len(notes) > 0 for notes in json_content_server.values())
-        if not has_notes:
-            print(f"No notes found for user '{username}'.")
-            return
-        print(f"Server notes for user '{username}':")
-        for permission, notes in json_content_server.items():
-            for note in notes:
-                print(f"{note['title']}, {permission}")
-
+        json_content = read_note(notes_path)
+        list_notes_from_json(json_content, "local storage")
+        return json_content
     except FileNotFoundError:
         print(f"Error: The file {notes_path} does not exist.")
     except json.JSONDecodeError:
         print(f"Error: Failed to parse the JSON file {notes_path}.")
-    except KeyError as e:
-        print(f"Error: Missing expected key {e} in the JSON structure.")
+    return {}
 
 
+def fetch_notes_server(httpsession: Session, username: str) -> dict:
+    """Fetches notes from the server."""
+    try:
+        response = httpsession.get(
+            f"{FRONTEND_URL}/users/{username}/notes", timeout=SERVER_TIMEOUT, verify=False
+        )
+        if response.status_code == 500:
+            print("Internal server error.")
+            return {}
+
+        json_content = response.json()
+        list_notes_from_json(json_content, "server")
+        return json_content
+    except requests.RequestException as e:
+        print(f"Error: Failed to fetch server notes. Details: {e}")
+    return {}
+
+
+def list_notes(httpsession: Session, username: str):
+    """Lists notes both locally and from the server."""
+    notes_path = os.path.join(NOTES_DIR, f"{username}_notes.json")
+    fetch_notes_local(notes_path, username)
+    fetch_notes_server(httpsession, username)
