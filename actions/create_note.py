@@ -29,7 +29,6 @@ def create_note(httpsession: Session, user: str) -> None:
 
         headers = {
             "Content-Type": "application/json",
-            "req-from": user,
             "version": str(json_content['version'])  # TODO: Se alguem intersepta esta note e altera a versao tamos fdds
         }
         
