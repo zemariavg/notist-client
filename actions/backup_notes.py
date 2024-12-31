@@ -15,7 +15,7 @@ def backup_on_server(httpsession: Session, user: str, note_json: dict) -> int:
     # print(f"Sending note {note_title} to server")
     headers = {
         "Content-Type": "application/json",
-        "req_from": user,
+        "req-from": user,
         "version": str(unprotected_note['version'])  # TODO: Se alguem intersepta esta note e altera a versao tamos fdds
     }
     response = httpsession.post(f"{FRONTEND_URL}/backup_note", json=note_json, headers=headers,

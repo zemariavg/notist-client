@@ -8,7 +8,6 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def retrieve_notes(httpsession: Session, username: str):
-    print(f"Retrieving notes for user {username}...")
     try:
         response = httpsession.get(f"{FRONTEND_URL}/users/{username}/notes", timeout=SERVER_TIMEOUT, verify=False)
         notes = response.json()
@@ -21,8 +20,6 @@ def retrieve_notes(httpsession: Session, username: str):
         with open(note_path, "w") as note_file:
             json.dump(notes, note_file, indent=4)
 
-        #TODO: On Retrieve, get note_key from collaborator table for a note
-        print(f"Notes for user '{username}' successfully retrieved.")
     except Exception as e:
         #TODO: User Not Found Exception - abort in the server
         print(f"An error occurred: {e}")

@@ -13,7 +13,7 @@ from actions.add_collaborator import add_collaborator, add_collaborator
 from actions.check_integrity import check_integrity
 
 def print_actions() -> None:
-    print("Notist. The fully encripted note-taking app.")
+    print("Welcome to Notist. The fully encrypted note-taking app.")
     print("\t1 - create note")
     print("\t2 - read note")
     print("\t3 - edit note")
@@ -49,7 +49,6 @@ def login():
 
         retrieve_notes(session, username)
         print(f"Successfully logged in as '{username}'")
-        print(f"Welcome to Notist!")
         return username, session
     except Exception as e:
         raise e
