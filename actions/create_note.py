@@ -13,8 +13,8 @@ def create_note(httpsession: Session, user: str) -> None:
         notes_path = os.path.join(NOTES_DIR, f"{user}_notes.json")
 
         title = write_title(user)
-        #if title == None:
-        #    return
+        if title == None:
+           return
         content = write_note_content()
 
         # build json
@@ -29,9 +29,10 @@ def create_note(httpsession: Session, user: str) -> None:
 
         headers = {
             "Content-Type": "application/json",
-            "req_from": user,
+            "req-from": user,
             "version": str(json_content['version'])  # TODO: Se alguem intersepta esta note e altera a versao tamos fdds
         }
+        
         response = httpsession.post(f"{FRONTEND_URL}/create_note", json=protected_note, headers=headers, timeout=SERVER_TIMEOUT, verify=False)
 
         if response.status_code == 401:
