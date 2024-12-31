@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
             check_integrity(username, note, int(version))
         elif action == "8":
-            list_notes(username)
+            list_notes(session, username)
 
         elif action == "9":
             print("Exiting...")
