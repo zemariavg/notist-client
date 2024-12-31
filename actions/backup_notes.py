@@ -1,16 +1,15 @@
-from cryptolib.utils import read_note
 from cryptolib.unprotect import unprotect_note
 from cryptolib.protect import protect_note
 from datetime import datetime
-from config import NOTES_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL, SERVER_TIMEOUT
-from utils.noteutils import find_note
+from config import NOTES_DIR, get_priv_key, get_pub_key, FRONTEND_URL, SERVER_TIMEOUT
+from utils.noteutils import find_note, read_note
 from requests import Session
 import requests
 import os
 import json
 
 def backup_on_server(httpsession: Session, user: str, note_json: dict) -> int:
-    unprotected_note, ciphered_note_key = unprotect_note(note_json, PRIV_KEY)
+    unprotected_note, ciphered_note_key = unprotect_note(note_json, get_priv_key)
 
     # print(f"Sending note {note_title} to server")
     headers = {
@@ -49,6 +48,7 @@ def backup_note_from_file(httpsession: Session, user: str, note_title: str) -> i
             return backup_on_server(httpsession, user, note_json)
 
     except Exception as e:
+        print(note_title)
         print(f"Error sending note to server: {e}")
         return 0
 
@@ -62,8 +62,7 @@ def backup_all_notes(httpsession: Session, user: str) -> None:
             print(f"No notes found for user '{user}'.")
             return
 
-        with open(notes_file_path, 'r', encoding='utf-8') as file:
-            notes_file = json.load(file)
+        notes_file = read_note(notes_file_path)
 
         if not any(notes_file.values()):
             print(f"No notes found for user '{user}'.")

@@ -2,7 +2,7 @@ import os
 from cryptolib.unprotect import unprotect_note
 from cryptolib.utils.noteparser import is_valid_protected_note
 from datetime import datetime
-from config import NOTES_DIR, PRIV_KEY
+from config import NOTES_DIR, get_priv_key
 from utils.noteutils import read_note, find_note
 import json
 
@@ -18,7 +18,7 @@ def read_user_note(username, note_title: str) -> None:
             raise Exception(f"Note '{note_title}' not found for user '{username}' or user has no access.")
         elif is_valid_protected_note(protected_note):
             # unprotect note
-            unprotected = unprotect_note(protected_note, PRIV_KEY)[0]
+            unprotected = unprotect_note(protected_note, get_priv_key(username))[0]
             print(f"Title: {unprotected['title']}")
             print(f"Version: {unprotected['version']}, Last modified by: {unprotected['last_modified_by']}")
             print(f"Date created: {unprotected['date_created']}, Date modified: {unprotected['date_modified']}")

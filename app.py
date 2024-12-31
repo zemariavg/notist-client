@@ -2,7 +2,7 @@ import argparse
 import requests
 import os
 import getpass
-from config import NOTES_DIR, KEYS_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL
+from config import NOTES_DIR, FRONTEND_URL
 from requests import Session
 from actions.create_note import create_note
 from actions.read_note import read_user_note

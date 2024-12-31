@@ -1,5 +1,5 @@
 from requests import Session
-from config import NOTES_DIR, PRIV_KEY, PUB_KEY, FRONTEND_URL, SERVER_TIMEOUT
+from config import NOTES_DIR, FRONTEND_URL, SERVER_TIMEOUT
 import requests
 import os
 import json

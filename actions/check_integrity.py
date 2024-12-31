@@ -2,7 +2,7 @@ import requests
 import json
 import os
 import tempfile
-from config import FRONTEND_URL, PRIV_KEY, SERVER_TIMEOUT
+from config import FRONTEND_URL, get_priv_key, SERVER_TIMEOUT
 from cryptolib.check import check_note
 
 def check_integrity(user: str, note_title: str, version: int) -> None:
@@ -27,7 +27,7 @@ def check_integrity(user: str, note_title: str, version: int) -> None:
             temp_note_path = temp_note.name
             
         try:
-            check_note(temp_note_path, PRIV_KEY)
+            check_note(temp_note_path, get_priv_key(user))
             print(f"Note {note_title} version {version} is intact.")
         except Exception as e:
             print(f"Note {note_title} version {version} has been tampered with: {e}")

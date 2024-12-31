@@ -1,7 +1,7 @@
 import requests
 import tempfile
 from datetime import datetime
-from config import FRONTEND_URL, PRIV_KEY, SERVER_TIMEOUT, NOTES_DIR, PUB_KEY
+from config import FRONTEND_URL, get_priv_key, SERVER_TIMEOUT, NOTES_DIR, get_pub_key
 from utils.noteutils import *
 from requests import Session
 from cryptolib.unprotect import unprotect_note
@@ -26,7 +26,7 @@ def add_collaborator(httpsession: Session, user: str):
             return
 
         ciphered_note_key = note.get("ciphered_note_key")
-        unprotected_note, note_key =  unprotect_note(note, PRIV_KEY)
+        unprotected_note, note_key =  unprotect_note(note, get_priv_key(user))
         
         permission = input("Enter the permission (editor/viewer): ")
         if not update_note_permissions(unprotected_note, user_to_add, permission):
@@ -39,7 +39,7 @@ def add_collaborator(httpsession: Session, user: str):
         add_collaborator_to_backend(httpsession, user_to_add, permission, collaborator_protected_note, note_title)
         
         # protect with this user's public key so he can access it
-        edited_note = protect_note(unprotected_note, note_key, PUB_KEY)
+        edited_note = protect_note(unprotected_note, note_key, get_pub_key(user))
         overwrite_note(notes_path, notes_file_json_content, edited_note)
 
     except Exception as e:
