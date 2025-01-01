@@ -7,7 +7,7 @@ from .utils.noteparser import *
 def protect_note(note_json: dict, note_key: bytes, pub_key_path: str) -> dict:
     """ Ciphers note with AES GCM and AES key with RSA public key """
     try:
-        print("Protecting note...")
+        print("Protecting note...") 
         print("Generating random IV...")
         iv = generate_random_iv()
         note = json.dumps(note_json).encode()
