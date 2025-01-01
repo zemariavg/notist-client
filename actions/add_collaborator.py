@@ -6,6 +6,7 @@ from utils.noteutils import *
 from requests import Session
 from cryptolib.unprotect import unprotect_note
 from cryptolib.protect import protect_note
+from actions.retrieve_notes import retrieve_notes
 
 def add_collaborator(httpsession: Session, user: str):
     try:
@@ -39,8 +40,9 @@ def add_collaborator(httpsession: Session, user: str):
         add_collaborator_to_backend(httpsession, user_to_add, permission, collaborator_protected_note, note_title)
         
         # protect with this user's public key so he can access it
-        edited_note = protect_note(unprotected_note, note_key, get_pub_key(user))
-        overwrite_note(notes_path, notes_file_json_content, edited_note)
+        #edited_note = protect_note(unprotected_note, note_key, get_pub_key(user))
+        retrieve_notes(httpsession, user)
+        #overwrite_note(notes_path, notes_file_json_content, edited_note)
 
     except Exception as e:
         print(f"Error adding editor/viewer: {str(e)}")

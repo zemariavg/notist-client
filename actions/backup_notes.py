@@ -9,7 +9,7 @@ import os
 import json
 
 def backup_on_server(httpsession: Session, user: str, note_json: dict) -> int:
-    unprotected_note, ciphered_note_key = unprotect_note(note_json, get_priv_key)
+    unprotected_note, ciphered_note_key = unprotect_note(note_json, get_priv_key(user))
 
     # print(f"Sending note {note_title} to server")
     headers = {

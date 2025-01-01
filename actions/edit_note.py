@@ -18,7 +18,8 @@ def edit_note(httpsession: Session, note_title: str, user: str) -> None:
         protected_note = find_note(json_content, note_title, "edit")
 
         if not protected_note:
-            raise Exception(f"Note '{note_title}' not found for user '{user}' or user has no access.")
+            print(f"Note '{note_title}' not found for user '{user}' or user has no access.")
+            return
         elif is_valid_protected_note(protected_note):
             unprotected, note_key = unprotect_note(protected_note, get_priv_key(user))
             print(f"Editing note '{note_title}' ...")
