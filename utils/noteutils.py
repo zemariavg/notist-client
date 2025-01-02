@@ -46,15 +46,3 @@ def write_note(notes_path, note):
             notes_data.setdefault('owner', []).append(note)
             f.seek(0)
             json.dump(notes_data, f, indent=4)
-
-def overwrite_note(notes_path, json_content, protected_note):
-    roles = ["owner", "editor"]  # Roles with editing permissions
-    for role in roles:
-        notes = json_content.get(role, [])
-        for i, note in enumerate(notes):
-            if note.get("title") == protected_note['title']:
-                notes[i] = protected_note  # Update the note
-                break
-    # overwrite
-    with open(notes_path, 'w', encoding='utf-8') as file:
-        json.dump(json_content, file, indent=4)

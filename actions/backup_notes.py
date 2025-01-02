@@ -11,7 +11,6 @@ import json
 def backup_on_server(httpsession: Session, user: str, note_json: dict) -> int:
     unprotected_note, ciphered_note_key = unprotect_note(note_json, get_priv_key(user))
 
-    # print(f"Sending note {note_title} to server")
     headers = {
         "Content-Type": "application/json",
         "version": str(unprotected_note['version'])  
@@ -29,7 +28,6 @@ def backup_on_server(httpsession: Session, user: str, note_json: dict) -> int:
         print(f"{response}: Failed to send note to server.")
         return 0
     else:
-        # print(f"sent note {note_title} to server.")
         return 1
 
 def backup_note_from_file(httpsession: Session, user: str, note_title: str) -> int:

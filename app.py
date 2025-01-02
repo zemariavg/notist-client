@@ -3,13 +3,12 @@ import requests
 import os
 import getpass
 from config import NOTES_DIR, FRONTEND_URL
-from requests import Session
 from actions.create_note import create_note
 from actions.read_note import read_user_note
 from actions.edit_note import edit_note
 from actions.backup_notes import backup_all_notes
 from actions.retrieve_notes import retrieve_notes
-from actions.add_collaborator import add_collaborator, add_collaborator
+from actions.add_collaborator import add_collaborator
 from actions.check_integrity import check_integrity
 from actions.list_notes import list_notes
 

@@ -4,7 +4,7 @@ from cryptolib.protect import protect_note
 from cryptolib.utils.noteparser import is_valid_protected_note
 from datetime import datetime
 from config import NOTES_DIR, get_pub_key, get_priv_key
-from utils.noteutils import read_note, find_note, overwrite_note, write_note_content
+from utils.noteutils import read_note, find_note, write_note_content
 from actions.backup_notes import backup_on_server
 from actions.retrieve_notes import retrieve_notes
 from requests import Session
@@ -39,7 +39,6 @@ def edit_note(httpsession: Session, note_title: str, user: str) -> None:
                 return
 
             retrieve_notes(httpsession, user)
-            #overwrite_note(notes_path, json_content, protected)
             print(f"Note '{note_title}' edited successfully.")
         else:
             raise Exception(f"edit_note.py: Note '{note_title}': Invalid protected json")

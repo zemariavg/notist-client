@@ -38,11 +38,7 @@ def add_collaborator(httpsession: Session, user: str):
         collaborator_protected_note['version'] = unprotected_note['version']
 
         add_collaborator_to_backend(httpsession, user_to_add, permission, collaborator_protected_note, note_title)
-        
-        # protect with this user's public key so he can access it
-        #edited_note = protect_note(unprotected_note, note_key, get_pub_key(user))
         retrieve_notes(httpsession, user)
-        #overwrite_note(notes_path, notes_file_json_content, edited_note)
 
     except Exception as e:
         print(f"Error adding editor/viewer: {str(e)}")
