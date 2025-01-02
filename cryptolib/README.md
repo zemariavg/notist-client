@@ -2,7 +2,7 @@
 NotIST employs AES-GCM encryption to encrypt and decrypt notes, relying on RSA to encrypt and decrypt the AES key used to encrypt the note.  
 
 ### To install cryptolib:
-From the root directory, notist-client/, run:
+From the directory `notist-client/` run:
 ```bash
 pip install .
 ```
@@ -25,4 +25,9 @@ python3 -m cryptolib.notist unprotect <note_path> <rsa_priv_key_path>
 #### To check note integrity:
 ```bash
 python3 -m cryptolib.notist check <note_path> <rsa_priv_key_path>
+```
+
+#### To run the tests:
+```bash
+python3 -m cryptolib.test.tests
 ```
