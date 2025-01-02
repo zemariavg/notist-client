@@ -28,7 +28,7 @@ def create_note(httpsession: Session, user: str) -> None:
 
         headers = {
             "Content-Type": "application/json",
-            "version": str(json_content['version'])  # TODO: Se alguem intersepta esta note e altera a versao tamos fdds
+            "version": str(json_content['version'])
         }
         
         response = httpsession.post(f"{FRONTEND_URL}/create_note", json=protected_note, headers=headers, timeout=SERVER_TIMEOUT, verify=False)

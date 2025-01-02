@@ -21,6 +21,5 @@ def retrieve_notes(httpsession: Session, username: str):
             json.dump(notes, note_file, indent=4)
 
     except Exception as e:
-        #TODO: User Not Found Exception - abort in the server
         print(f"An error occurred: {e}")
 
